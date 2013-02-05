@@ -29,6 +29,11 @@
 \usepackage{amsfonts,amsmath,amssymb,amsthm,booktabs,color,enumitem,graphicx}
 \usepackage[pdftex,hidelinks]{hyperref}
 
+\usepackage{pgf}
+\usepackage{tikz}
+\usetikzlibrary{graphs, graphs.standard}
+\usetikzlibrary{arrows}
+
 % Automatically set the PDF metadata fields
 \makeatletter
 \AtBeginDocument{\hypersetup{pdftitle = {\@title}, pdfauthor = {\@author}}}
@@ -64,6 +69,19 @@
 
 \newcommand{\set}[1]{\left\{ #1 \right\}}
 \newcommand{\nat}{\mathbb{N}}
+
+\DeclareMathOperator{\id}{ID}
+
+\newcommand{\cycleGraph}[2]
+{
+\begin{tikzpicture}
+    \draw circle [radius=#1];
+    \graph [nodes={draw, circle,fill=white}, clockwise, radius=#1, empty nodes]{
+        subgraph I_n [n = #2]
+    };
+\end{tikzpicture}
+}
+
 
 
 % --- tktltiki2 options ---
@@ -108,15 +126,15 @@
 % --- Front matter ---
 
 \maketitle        % title page
-\makeabstract     % abstract page
+%\makeabstract     % abstract page
 
-\tableofcontents  % table of contents
+%\tableofcontents  % table of contents
 \newpage          % clear page after the table of contents
 
 
 % --- Main matter ---
 
-\section{Johdanto}
+\section*{Johdanto}
 
 Artikkelissa \emph{Locality in Distributed Graph Algorithms}~\cite{linial92}
 Linial näyttää, ettei hajautettu algoritmi voi 3-värittää $n$ solmun sykliä
@@ -124,7 +142,7 @@ alle ${\log^* n}$ kierroksessa. Tämä alaraja on tiukka, sillä Colen ja
 Vishkinin~\cite{colevishkin86} algoritmilla $n$-syklin voi 3-värittää ${\log^*
 n}$ kierroksessa.
 
-\section{Laskennan malli}
+\section*{Laskennan malli}
 
 Olkoon $G = (V,E)$ suuntaamaton verkko. Verkon jokaisessa solmussa $v \in V$ on
 tietokone. Laskenta koostuu kommunikointikierroksista. Yhden
@@ -136,7 +154,10 @@ kommunikaatiokierroksen aikana jokainen solmu voi:
     \item vastaanottaa naapureiden lähettämät viestit
 \end{enumerate}
 
-\section{Verkon väritys}
+Lisäksi jokaiselle solmulle $v \in V$ on annettu yksikäsitteinen tunniste
+$\id(v) \in \set{1,\dots,|V|}$
+
+\section*{Verkon väritys}
 
 Verkko on väritetty, jos jokaiseen solmuun $v \in V$ on liitetty jokin väri ja
 kahdella vierekkäisellä solmulla ei koskaan ole samaa väriä. Tarkemmin, verkon
@@ -149,20 +170,61 @@ Verkon voi värittää $k$:lla värillä jos löytyy yllä olevan ehdon täyttä
 kuvaus $c : V \rightarrow \set{1,\dots,k}$. Tällaista väritystä kutsutaan
 $k$-väritykseksi.
 
-TODO: tähän pari kuvaa väritetyistä verkoista
+\definecolor{color1}{RGB}{255, 255, 204}
+\definecolor{color2}{RGB}{194, 230, 153}
+\definecolor{color3}{RGB}{120, 198, 121}
+\definecolor{color4}{RGB}{35, 132, 67}
 
-\section{Sykli}
+\begin{center}
+    \begin{tikzpicture}[nodes={draw, circle, inner sep=.13cm}]
+        \node [fill=color1] (a1) at (0,0)       {};
+        \node [fill=color1] (a2) at (1,0)       {};
+        \node [fill=color2] (a3) at (0,1)       {};
+        \node [fill=color3] (a4) at (1,1.5)     {};
+        \node [fill=color2] (a5) at (2,0.75)    {};
+        \node [fill=color1] (a6) at (3,1.5)     {};
+        \node [fill=color3] (a7) at (3,0)       {};
+        \node [fill=color4] (a8) at (3.75,0.75) {};
+
+        \graph {
+            (a3) -- {(a1), (a2), (a4)},
+            (a4) -- {(a2), (a5)},
+            (a5) -- {(a2), (a6), (a7)},
+            (a8) -- {(a5), (a6), (a7)},
+            (a4) -- (a6)
+        };
+    \end{tikzpicture}
+\end{center}
+
+\section*{Sykli}
 
 Verkko on sykli, jos se on yhtenäinen ja sen jokaisella solmulla on tasan kaksi
 naapuria.
 
-TODO: kuva syklistä
+\begin{center}
+    \begin{tabular}{ccc}
+        \cycleGraph{.95cm}{6} & \cycleGraph{.95cm}{3} & \cycleGraph{.95cm}{9} \\
+    \end{tabular}
+\end{center}
 
 Syklin voi aina värittää kolmella värillä.
 
-TODO: kuva 3-väritetystä syklistä
+\begin{center}
+    \begin{tikzpicture}
+        \draw circle [radius=.95cm];
+        \graph [simple,nodes={draw, circle,fill=white}, clockwise, radius=.95cm, n=7, empty nodes]{
+            1 [fill=color1];
+            2 [fill=color2];
+            3 [fill=color1];
+            4 [fill=color2];
+            5 [fill=color1];
+            6 [fill=color2];
+            7 [fill=color3];
+        };
+    \end{tikzpicture}
+\end{center}
 
-\section{Iteroitu logaritmi $\log^*$}
+\section*{Iteroitu logaritmi $\log^*$}
 
 Iteroitu logaritmi $\log^*$ kertoo kuinka monta kertaa luvusta täytyy ottaa
 logaritmi, kunnes lopputulos on korkeintaan yksi.
@@ -185,18 +247,13 @@ Esimerkiksi
                  &= 4,
 \end{align*}
 %
-mistä voi huomata, että $\log^* n$ on arvoltaan pienempi kuin 5, kun $n <
+mistä voi huomata, että $\log^* n$ on arvoltaan pienempi kuin 5 kun $n <
 2^{65536}$. Iteroitu logaritmi on siis äärimmäisen hitaasti kasvava funktio.
 
-\section{todo}
-
-\begin{itemize}
-    \item $\Omega(\log^* n)$ alaraja syklissä
-    \item löytyy $O(\log^* n)$ algoritmi
-    \item viitteet verkkoteoreettisten termien määritelmiin?
-    \item viite laskennan mallin määritelmän yhteyteen?
-\end{itemize}
-
+Linial näyttää, että hajautetun algoritmin tulee käyttää ainakin $\Omega(\log^*
+n)$ kierrosta syklin 3-värittämiseen. Tämä raja on myös asymptoottisesti
+tiukka, sillä Colen ja Vishkinin algoritmi värittää syklin kolmella värillä
+$O(\log^* n)$ kierroksessa.
 
 % --- Back matter ---
 %
