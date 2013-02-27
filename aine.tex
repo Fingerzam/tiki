@@ -1,0 +1,384 @@
+% --- Template for thesis / report with tktltiki2 class ---
+
+\documentclass[finnish]{tktltiki2}
+
+% tktltiki2 automatically loads babel, so you can simply
+% give the language parameter (e.g. finnish, swedish, english, british) as
+% a parameter for the class: \documentclass[finnish]{tktltiki2}.
+% The information on title and abstract is generated automatically depending on
+% the language, see below if you need to change any of these manually.
+% 
+% Class options:
+% - grading                 -- Print labels for grading information on the front page.
+% - disablelastpagecounter  -- Disables the automatic generation of page number information
+%                              in the abstract. See also \numberofpagesinformation{} command below.
+%
+% The class also respects the following options of article class:
+%   10pt, 11pt, 12pt, final, draft, oneside, twoside,
+%   openright, openany, onecolumn, twocolumn, leqno, fleqn
+%
+% The default font size is 11pt. The paper size used is A4, other sizes are not supported.
+%
+% rubber: module pdftex
+
+% --- General packages ---
+
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{amsfonts,amsmath,amssymb,amsthm,booktabs,color,enumitem,graphicx}
+\usepackage[pdftex,hidelinks]{hyperref}
+
+\usepackage{pgf}
+\usepackage{tikz}
+\usetikzlibrary{graphs, graphs.standard}
+\usetikzlibrary{arrows}
+
+% Automatically set the PDF metadata fields
+\makeatletter
+\AtBeginDocument{\hypersetup{pdftitle = {\@title}, pdfauthor = {\@author}}}
+\makeatother
+
+% --- Language-related settings ---
+%
+% these should be modified according to your language
+
+% babelbib for non-english bibliography using bibtex
+\usepackage[fixlanguage]{babelbib}
+\selectbiblanguage{finnish}
+
+% add bibliography to the table of contents
+\usepackage[nottoc,numbib]{tocbibind}
+% tocbibind renames the bibliography, use the following to change it back
+\settocbibname{Lähteet}
+
+% --- Theorem environment definitions ---
+
+\newtheorem{lau}{Lause}
+\newtheorem{lem}[lau]{Lemma}
+\newtheorem{kor}[lau]{Korollaari}
+
+\theoremstyle{definition}
+\newtheorem{maar}[lau]{Määritelmä}
+\newtheorem{ong}{Ongelma}
+\newtheorem{alg}[lau]{Algoritmi}
+\newtheorem{esim}[lau]{Esimerkki}
+
+\theoremstyle{remark}
+\newtheorem*{huom}{Huomautus}
+
+\newcommand{\set}[1]{\left\{ #1 \right\}}
+\newcommand{\nat}{\mathbb{N}}
+
+\DeclareMathOperator{\id}{ID}
+
+\newcommand{\cycleGraph}[2]
+{
+\begin{tikzpicture}
+    \draw circle [radius=#1];
+    \graph [nodes={draw, circle,fill=white}, clockwise, radius=#1, empty nodes]{
+        subgraph I_n [n = #2]
+    };
+\end{tikzpicture}
+}
+
+
+
+% --- tktltiki2 options ---
+%
+% The following commands define the information used to generate title and
+% abstract pages. The following entries should be always specified:
+
+\title{Paikallisuus hajautetuissa verkkoalgoritmeissa}
+\author{Juhana Laurinharju}
+\date{\today}
+\level{Tieteellinen kirjoittaminen}
+\abstract{Tiivistelmä.}
+
+% The following can be used to specify keywords and classification of the paper:
+
+%\keywords{avainsana 1, avainsana 2, avainsana 3}
+%\classification{} % classification according to ACM Computing Classification System (http://www.acm.org/about/class/)
+                  % This is probably mostly relevant for computer scientists
+
+% If the automatic page number counting is not working as desired in your case,
+% uncomment the following to manually set the number of pages displayed in the abstract page:
+%
+% \numberofpagesinformation{16 sivua + 10 sivua liitteissä}
+%
+% If you are not a computer scientist, you will want to uncomment the following by hand and specify
+% your department, faculty and subject by hand:
+%
+% \faculty{Matemaattis-luonnontieteellinen}
+% \department{Tietojenkäsittelytieteen laitos}
+% \subject{Tietojenkäsittelytiede}
+%
+% If you are not from the University of Helsinki, then you will most likely want to set these also:
+%
+% \university{Helsingin Yliopisto}
+% \universitylong{HELSINGIN YLIOPISTO --- HELSINGFORS UNIVERSITET --- UNIVERSITY OF HELSINKI} % displayed on the top of the abstract page
+% \city{Helsinki}
+%
+
+
+\begin{document}
+
+% --- Front matter ---
+
+\maketitle        % title page
+%\makeabstract     % abstract page
+
+%\tableofcontents  % table of contents
+\newpage          % clear page after the table of contents
+
+
+% --- Main matter ---
+
+\section*{Johdanto}
+
+\section{Määritelmiä}
+
+\subsection{Verkko}
+
+\emph{Suuntaamaton verkko} on pari $G = (V,E)$, missä $V$ on \emph{solmujoukko}
+ja $E$ on \emph{kaarijoukko}. \emph{Kaari} solmusta $v \in V$ solmuun $u \in V$
+on kaksikko $\set{v,u} \in E$. Kaarta voidaan myös merkitä lyhyemmin $vu$.
+Esimerkiksi verkko $G = (V,E)$, missä
+%
+\begin{align*}
+    V &= \set{a,b,c,d} \text{ ja}\\
+    E &= \set{ \set{a,b}, \set{b,c}, \set{c,a}, \set{a,d}} \\
+      &= \set{ab, bc, ca, ad}
+\end{align*}
+%
+näyttää seuraavalta
+%
+\begin{center}
+    \begin{tikzpicture}
+        \graph[nodes={circle, draw, minimum size=7mm}, clockwise]{
+            subgraph C_n [V={a,b,c}];
+            a -- d[x=2, y=0];
+        };
+    \end{tikzpicture}
+\end{center}
+
+\subsection{Laskennan malli}
+
+Olkoon $G = (V,E)$ suuntaamaton verkko. Verkon jokaisessa solmussa $v \in V$ on
+tietokone. Laskenta koostuu \emph{kommunikointikierroksista}. Yhden
+kommunikaatiokierroksen aikana jokainen solmu voi:
+
+\begin{enumerate}
+    \item suorittaa mielivaltaista laskentaa
+    \item lähettää viestin jokaiselle naapurilleen
+    \item vastaanottaa naapureiden lähettämät viestit
+\end{enumerate}
+
+Lisäksi jokaiselle solmulle $v \in V$ on annettu yksikäsitteinen tunniste
+$\id(v) \in \set{1,\dots,|V|}$. Laskennan päätyttyä jokaisen solmun tulee
+tietää oma tulosteensa.
+
+TODO: motivointia sille, että tarkastellaan vain kommunikaatiokierrosten
+lukumäärää aikavaativuutena.
+
+\subsection{Verkon väritys}
+
+Verkko on \emph{väritetty}, jos jokaiseen solmuun $v \in V$ on liitetty jokin
+\emph{väri} ja kahdella vierekkäisellä solmulla ei koskaan ole samaa väriä.
+Tarkemmin, verkon $G = (V,E)$ \emph{solmuväritys} on kuvaus $c : V \rightarrow
+\set{1,\dots,k}$ jollain luonnollisella luvulla $k \in \nat$. Lisäksi
+vaaditaan, että jos verkossa on kaari solmusta $v$ solmuun $u$, eli $vu \in E$,
+niin $c(v) \neq c(u)$.
+
+Verkon voi värittää $k$:lla värillä jos löytyy yllä olevan ehdon täyttävä
+kuvaus $c : V \rightarrow \set{1,\dots,k}$. Tällaista väritystä kutsutaan
+\emph{$k$-väritykseksi}.
+
+\definecolor{color1}{RGB}{215, 25, 28}
+\definecolor{color2}{RGB}{253, 174, 97}
+\definecolor{color3}{RGB}{171, 217, 233}
+\definecolor{color4}{RGB}{44, 123, 182}
+
+\begin{center}
+    \begin{tikzpicture}[nodes={draw, circle, inner sep=.13cm}]
+        \node [fill=color1] (a1) at (0,0)       {};
+        \node [fill=color1] (a2) at (1,0)       {};
+        \node [fill=color2] (a3) at (0,1)       {};
+        \node [fill=color3] (a4) at (1,1.5)     {};
+        \node [fill=color2] (a5) at (2,0.75)    {};
+        \node [fill=color1] (a6) at (3,1.5)     {};
+        \node [fill=color3] (a7) at (3,0)       {};
+        \node [fill=color4] (a8) at (3.75,0.75) {};
+
+        \graph {
+            (a3) -- {(a1), (a2), (a4)},
+            (a4) -- {(a2), (a5)},
+            (a5) -- {(a2), (a6), (a7)},
+            (a8) -- {(a5), (a6), (a7)},
+            (a4) -- (a6)
+        };
+    \end{tikzpicture}
+\end{center}
+
+Jos verkkoa väritetään hajautetulla algoritmilla, niin jokaisen solmun tulee
+tietää oma värinsä laskennan päätyttyä.
+
+\subsection{Sykli}
+
+Verkko on \emph{sykli}, jos se on yhtenäinen ja sen jokaisella solmulla on
+tasan kaksi naapuria.
+%
+\begin{center}
+    \begin{tabular}{ccc}
+        \cycleGraph{.95cm}{6} & \cycleGraph{.95cm}{3} & \cycleGraph{.95cm}{9} \\
+    \end{tabular}
+\end{center}
+%
+Tarkemmin sanoen, $n$-sykli, missä $n \geq 3$, on verkko $C_n = (V,E)$ jolla
+%
+\begin{align*}
+    V &= \set{v_1, v_2, \dots, v_n} \\
+    E &= \set{v_iv_{i+1} \mid 1 \leq i < n} \cup \set{v_n v_1}
+\end{align*}
+%
+
+Syklin voi aina värittää kolmella värillä.
+
+\begin{center}
+    \begin{tikzpicture}
+        \draw circle [radius=.95cm];
+        \graph [simple,nodes={draw, circle,fill=white}, clockwise, radius=.95cm, n=7, empty nodes]{
+            1 [fill=color1];
+            2 [fill=color2];
+            3 [fill=color1];
+            4 [fill=color2];
+            5 [fill=color1];
+            6 [fill=color2];
+            7 [fill=color3];
+        };
+    \end{tikzpicture}
+\end{center}
+
+\subsection{Iteroitu logaritmi $\log^*$}
+
+\emph{Iteroitu logaritmi} $\log^*$ kertoo kuinka monta kertaa luvusta täytyy ottaa
+logaritmi, kunnes lopputulos on korkeintaan yksi. Tarkemmin,
+
+\begin{equation*}
+    \log^* x =
+      \begin{cases}
+          0,                   &\text{jos } x \leq 1, \\
+          1 + \log^* (\log x), &\text{muutoin.}
+      \end{cases}
+\end{equation*}
+
+Esimerkiksi
+%
+\begin{align*}
+    \log^* 16 &= \log^* 2^{2^2} = 1 + \log^* 2^2 \\
+              &= 2+ \log^* 2 = 3 + \log^* 1 = 3 \\
+\intertext{ja}
+    \log^* 65536 &= \log^* 2^{2^{2^2}} = 1 + \log^* 16 \\
+                 &= 4,
+\end{align*}
+%
+joten $\log^* n$ on arvoltaan pienempi kuin 5 kun $n < 2^{65536}$. Iteroitu
+logaritmi on siis äärimmäisen hitaasti kasvava funktio.
+
+\subsection{Näkymä}
+
+Hajautetussa algoritmissa solmu $v \in V$ saa $k$:ssa kierroksessa selville
+oman $k$-ympäristönsä. Toisaalta solmu ei pysty tässä ajassa saamaan mitään
+selville solmuista, joiden etäisyys $v$:stä on yli $k$. Hajautettu algoritmi,
+jonka ajoaika on $k$ kierrosta on siis funktio, jonka lähtöjoukkona on solmujen
+mahdolliset $k$-ympäristöt.
+
+TODO: määrittele etäisyys
+
+TODO: tää kaipaa varmaan vähän selvennystä
+
+TODO: kuvasarja havainnollistamaan tätä
+
+Erityisesti syklissä algoritmi, jonka ajoaika on $k$ kierrosta, tekee
+päätöksensä $k$:n edeltäjän, $k$:n seuraajan ja oman solmun tunnisteiden
+perusteella. Toisin sanoen solmun $v_l \in V(C_n)$ tuloste on funktio arvoilta
+%
+\begin{equation*}
+    \left(
+        \id(v_{l-k}), \id(v_{l-k+1}), \dots,
+        \id(v_{l-1}), \id(v_l), \id(v_{l+1}), \dots, \id(v_{l+k})
+    \right),
+\end{equation*}
+%
+Missä yhteen- ja vähennyslaskut suoritetaan modulo $n$.
+
+TODO: Kuvasarja solmun näkymästä syklissä.
+
+Erityisesti jos algoritmi tuottaa 3-värityksen syklissä $k$:ssa kierroksessa,
+niin täytyy olla olemassa sellainen funktio $f: [n]^{2k+1} \to [3]$, joka
+tuottaa laillisen 3-värityksen riippumatta siitä miten solmuille on annettu
+tunnisteet.
+
+\subsection{Naapurustoverkot}
+
+TODO: liitä tää syklien näkymiin
+
+Naapurustoverkko $B_{t,n} = (V,E)$, missä $V$ on kaikkien vektoreiden
+$(x_1,\dots,x_{2t+1})$ joukko joilla $x_i$:t ovat keskenään erisuuria
+kokonaislukuja joukosta $[n]$. Verkossa $B_{t,n}$ solmut muotoa
+%
+\begin{equation*}
+    (x_1, \dots, x_{2t+1}) \text{ ja } (y,x_2,\dots,x_{2t})
+\end{equation*}
+%
+ovat naapureita, kun $y \neq x_{2t+1}$.
+
+TODO: esittele $[n]$ merkintä
+
+Verkossa $B_{t,n}$ on $n(n-1)(n-2) \cdots (n-2t)$ solmua ja sen kaikkien
+kaarten asteluku on $2(n-2t-1)$.
+
+TODO: termi asteluku esittelemättä
+
+TODO: kierrosmäärä on välillä $k$ ja välillä $t$
+
+Hajautettu algoritmi, joka 3-värittää syklin
+$t$ kierroksessa on funktio $c : V(B_{t,n}) \to [3]$.
+
+TODO: tätä vois perustella
+
+Nyt $c$ on myös laillinen 3-väritys verkolle $B_{t,n}$, sillä jos $c$ antaa
+solmuille
+%
+\begin{equation*}
+    (x_1, \dots, x_{2t+1}) \text{ ja } (y,x_2,\dots,x_{2t})
+\end{equation*}
+%
+saman värin, niin se antaa myös syklissa kahdelle vierekkäiselle solmulle saman
+värin kun syklissä esiintyy pätkä
+%
+\begin{equation*}
+    y, x_1, x_2, \dots, x_{2t+1}.
+\end{equation*}
+
+Siis jos näytetään, että verkkoa $B_{t,n}$ ei voi 3-värittää, niin ei voi
+myöskään olla hajautettua algoritmia joka värittäisi $n$-syklin kolmella
+värillä $t$ kierroksessa.
+
+
+% --- Back matter ---
+%
+% bibtex is used to generate the bibliography. The babplain style
+% will generate numeric references (e.g. [1]) appropriate for theoretical
+% computer science. If you need alphanumeric references (e.g [Tur90]), use
+%
+% \bibliographystyle{babalpha}
+%
+% instead.
+
+\bibliographystyle{babplain}
+\bibliography{references-fi}
+
+
+\end{document}
+
