@@ -72,6 +72,9 @@
 
 \DeclareMathOperator{\id}{ID}
 
+\DeclareMathOperator{\head}{head}
+\DeclareMathOperator{\tail}{tail}
+
 \newcommand{\cycleGraph}[2]
 {
 \begin{tikzpicture}
@@ -194,10 +197,10 @@ Verkon voi värittää $k$:lla värillä jos löytyy yllä olevan ehdon täyttä
 kuvaus $c : V \rightarrow \set{1,\dots,k}$. Tällaista väritystä kutsutaan
 \emph{$k$-väritykseksi}.
 
-\definecolor{color1}{RGB}{215, 25, 28}
-\definecolor{color2}{RGB}{253, 174, 97}
-\definecolor{color3}{RGB}{171, 217, 233}
-\definecolor{color4}{RGB}{44, 123, 182}
+\definecolor{color1}{RGB}{166, 206, 227}
+\definecolor{color2}{RGB}{31, 120, 180}
+\definecolor{color3}{RGB}{178, 223, 138}
+\definecolor{color4}{RGB}{51, 160, 4}
 
 \begin{center}
     \begin{tikzpicture}[nodes={draw, circle, inner sep=.13cm}]
@@ -367,8 +370,27 @@ värillä $t$ kierroksessa.
 
 \subsection{Suunnattu verkko}
 
+\emph{Suunnatto verkko} $G = (V,E)$ on verkko, jossa kaarilla on suunta.
+Suunnatussa verkossa on kaari solmusta $u \in V$ solmuun $v \in V$ jos $(u,v)
+\in E$. Suunnatulla kaarella $e = (u,v) \in E$ on \emph{kärki}
+%
+\begin{equation*}
+    \head(e) = v
+\end{equation*}
+%
+ja \emph{häntä}
+%
+\begin{equation*}
+    \tail(e) = u
+\end{equation*}
+
+TODO: onks kärki ja häntä oikeet käännökset?
+
+TODO: kuva suunnatusta verkosta ja havainnollistava kuva kärjestä ja hännästä
+
 \subsection{Väritysluku $\chi(G)$}
 
+Verkon $G$ väritysluku $\chi(G)$ on pienin määrä värejä, jolla sen voi värittää.
 
 \section{Sykliä ei voi 3-värittää alle $\log^* n$ kierroksessa}
 
@@ -410,8 +432,39 @@ TODO: selvennä tätä
 
 \subsection{Suunnatun verkon kaariverkko}
 
+Suunnatun verkon $G$ \emph{kaariverkko} $DL(G)$ on verkko, jonka solmuja ovat
+alkuperäisen verkon $G$ kaaret ja kahden kaariverkon solmun
+%
+\begin{equation*}
+    u,v \in V(DL(G)) = E(G)
+\end{equation*}
+%
+välillä on kaari, jos $\head(u) = \tail(v)$.
+
+TODO: havainnollistava kuva
+
+Tarkemmin ilmaistuna,
+%
+\begin{align*}
+    V(DL(G)) &= E(G) \\
+    E(DL(G)) &= \set{(v,u) \in E(G) \times E(G) \mid \head(v) = \tail(u)}.
+\end{align*}
 
 
+\begin{lem}
+    $D_{1,n}$ on $n$:n solmun täydellinen verkko, jossa on kaikki kaaret
+    molempiin suuntiin. Lisäksi
+    %
+    \begin{equation*}
+        D_{s + 1,n} = DL(D_{s,n}).
+    \end{equation*}
+\end{lem}
+
+\begin{lem}
+    \begin{equation*}
+        \chi(D_{s + 1,n}) \geq \log \chi(D_{s,n} ).
+    \end{equation*}
+\end{lem}
 
 
 % --- Back matter ---
