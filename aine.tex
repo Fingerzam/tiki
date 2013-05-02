@@ -137,7 +137,7 @@
 
 % --- Main matter ---
 
-\section*{Johdanto}
+\section{Johdanto}
 
 \section{Määritelmiä}
 
@@ -168,7 +168,7 @@ näyttää seuraavalta
 \subsection{Laskennan malli}
 
 Olkoon $G = (V,E)$ suuntaamaton verkko. Verkon jokaisessa solmussa $v \in V$ on
-tietokone. Laskenta koostuu \emph{kommunikointikierroksista}. Yhden
+tietokone. Laskenta koostuu \emph{kommunikaatiokierroksista}. Yhden
 kommunikaatiokierroksen aikana jokainen solmu voi:
 
 \begin{enumerate}
@@ -187,11 +187,11 @@ lukumäärää aikavaativuutena.
 \subsection{Verkon väritys}
 
 Verkko on \emph{väritetty}, jos jokaiseen solmuun $v \in V$ on liitetty jokin
-\emph{väri} ja kahdella vierekkäisellä solmulla ei koskaan ole samaa väriä.
-Tarkemmin, verkon $G = (V,E)$ \emph{solmuväritys} on kuvaus $c : V \rightarrow
-\set{1,\dots,k}$ jollain luonnollisella luvulla $k \in \nat$. Lisäksi
-vaaditaan, että jos verkossa on kaari solmusta $v$ solmuun $u$, eli $vu \in E$,
-niin $c(v) \neq c(u)$.
+\emph{väri} $c(v) \in \nat$ ja kahdella vierekkäisellä solmulla ei koskaan ole
+samaa väriä.  Tarkemmin, verkon $G = (V,E)$ \emph{solmuväritys} on kuvaus $c :
+V \rightarrow \set{1,\dots,k}$ jollain luonnollisella luvulla $k \in \nat$.
+Lisäksi vaaditaan, että jos verkossa on kaari solmusta $v$ solmuun $u$, eli $vu
+\in E$, niin $c(v) \neq c(u)$.
 
 Verkon voi värittää $k$:lla värillä jos löytyy yllä olevan ehdon täyttävä
 kuvaus $c : V \rightarrow \set{1,\dots,k}$. Tällaista väritystä kutsutaan
@@ -247,6 +247,8 @@ Tarkemmin sanoen, $n$-sykli, missä $n \geq 3$, on verkko $C_n = (V,E)$ jolla
 
 Syklin voi aina värittää kolmella värillä.
 
+TODO: tälle lähde?
+
 \begin{center}
     \begin{tikzpicture}
         \draw circle [radius=.95cm];
@@ -290,21 +292,46 @@ logaritmi on siis äärimmäisen hitaasti kasvava funktio.
 
 \subsection{Näkymä}
 
+\begin{maar}
+    Verkon $G$ \emph{polku} on jono $P = (p_1, \dots, p_n)$, missä jokainen
+    $p_i \in V(G)$ on verkon $G$ solmu ja lisäksi kahden jonon perättäisen
+    solmun välillä täytyy aina olla kaari. Siis kaikilla $i \in \set{1, \dots,
+        n-1}$ täytyy olla voimassa ehto $u_i u_{i+1} \in E(G)$. Polku $P$ on
+    polku solmusta $p_1$ solmuun $p_n$.
+\end{maar}
+
+TODO: kuva polusta
+
+\begin{maar}
+    Polun $P = (p_1, \dots, p_n)$ pituus on sen kaarten lukumäärä. Siis polun
+    $P$ pituus on $n-1$.
+\end{maar}
+
+TODO: kuvan polun pituus
+
+\begin{maar}
+    Kahden verkon $G$ solmun $u,v \in V(G)$ välinen \emph{etäisyys} verkossa
+    $G$, $d_G(u,v)$, on lyhimmän solmusta $u$ solmuun $v$ kulkevan polun pituus.
+\end{maar}
+
+TODO: tarvitaanko notaatiota $d_G(u,v)$?
+
+TODO: kuva lyhimmästä polusta ja etäisyydestä
+
 Hajautetussa algoritmissa solmu $v \in V$ saa $k$:ssa kierroksessa selville
 oman $k$-ympäristönsä. Toisaalta solmu ei pysty tässä ajassa saamaan mitään
-selville solmuista, joiden etäisyys $v$:stä on yli $k$. Hajautettu algoritmi,
-jonka ajoaika on $k$ kierrosta on siis funktio, jonka lähtöjoukkona on solmujen
-mahdolliset $k$-ympäristöt.
-
-TODO: määrittele etäisyys
-
-TODO: tää kaipaa varmaan vähän selvennystä
+selville solmuista, joiden etäisyys $v$:stä on yli $k$.
 
 TODO: kuvasarja havainnollistamaan tätä
 
+Hajautettu algoritmi, jonka ajoaika on $k$ kierrosta on siis funktio, jonka
+lähtöjoukkona on solmujen mahdolliset $k$-ympäristöt.
+
+TODO: tää kaipaa varmaan vähän selvennystä
+
 Erityisesti syklissä algoritmi, jonka ajoaika on $k$ kierrosta, tekee
-päätöksensä $k$:n edeltäjän, $k$:n seuraajan ja oman solmun tunnisteiden
-perusteella. Toisin sanoen solmun $v_l \in V(C_n)$ tuloste on funktio arvoilta
+päätöksensä $k$:n edeltäjän, $k$:n seuraajan ja oman tunnisteensa perusteella.
+Toisin sanoen solmun $v_l \in V(C_n)$ tuloste on funktio arvoilta
 %
 \begin{equation*}
     \left(
@@ -336,14 +363,22 @@ kokonaislukuja joukosta $[n]$. Verkossa $B_{t,n}$ solmut muotoa
 %
 ovat naapureita, kun $y \neq x_{2t+1}$.
 
-TODO: esittele $[n]$ merkintä
+TODO: esittele $[n]$ merkintä, tai älä käytä sitä ollenkaan
+
+TODO: pari kuvaa näistä verkoista pienillä parametrien arvoilla
+
+\begin{maar}
+    Solmun $v \in V(G)$ \emph{asteluku} on sen naapureiden lukumäärä verkossa
+    $G$. Tarkemmin, solmun $v \in V(G)$ asteluku on $|\set{e \in E(G) \mid v
+        \in e}|$.
+\end{maar}
 
 Verkossa $B_{t,n}$ on $n(n-1)(n-2) \cdots (n-2t)$ solmua ja sen kaikkien
-kaarten asteluku on $2(n-2t-1)$.
+solmujen asteluku on $2(n-2t-1)$.
 
-TODO: termi asteluku esittelemättä
+TODO: onko asteluvusta puhuminen olennaista?
 
-TODO: kierrosmäärä on välillä $k$ ja välillä $t$
+TODO: epäkonsistenttia: kierrosmäärä on välillä $k$ ja välillä $t$
 
 Hajautettu algoritmi, joka 3-värittää syklin
 $t$ kierroksessa on funktio $c : V(B_{t,n}) \to [3]$.
@@ -354,7 +389,7 @@ Nyt $c$ on myös laillinen 3-väritys verkolle $B_{t,n}$, sillä jos $c$ antaa
 solmuille
 %
 \begin{equation*}
-    (x_1, \dots, x_{2t+1}) \text{ ja } (y,x_2,\dots,x_{2t})
+    (x_1, \dots, x_{2t}, x_{2t+1}) \text{ ja } (y,x_1,\dots,x_{2t})
 \end{equation*}
 %
 saman värin, niin se antaa myös syklissa kahdelle vierekkäiselle solmulle saman
