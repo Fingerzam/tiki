@@ -75,6 +75,8 @@
 \DeclareMathOperator{\head}{head}
 \DeclareMathOperator{\tail}{tail}
 
+\DeclareMathOperator{\DL}{DL}
+
 \newcommand{\cycleGraph}[2]
 {
 \begin{tikzpicture}
@@ -453,7 +455,7 @@ Solmusta $(a_1,\dots,a_s)$ lähtee kaari muotoa
 oleviin solmuihin, joilla $a_s < b \leq n$.
 
 Nyt naapurustoverkko $B_{t,n}$ pitää sisällään aliverkkona suunnatun verkon
-$d_{2t+1,n}$.
+$D_{2t+1,n}$.
 
 TODO: avaa tätä
 
@@ -467,11 +469,11 @@ TODO: selvennä tätä
 
 \subsection{Suunnatun verkon kaariverkko}
 
-Suunnatun verkon $G$ \emph{kaariverkko} $DL(G)$ on verkko, jonka solmuja ovat
+Suunnatun verkon $G$ \emph{kaariverkko} $\DL(G)$ on verkko, jonka solmuja ovat
 alkuperäisen verkon $G$ kaaret ja kahden kaariverkon solmun
 %
 \begin{equation*}
-    u,v \in V(DL(G)) = E(G)
+    u,v \in V(\DL(G)) = E(G)
 \end{equation*}
 %
 välillä on kaari, jos $\head(u) = \tail(v)$.
@@ -481,19 +483,64 @@ TODO: havainnollistava kuva
 Tarkemmin ilmaistuna,
 %
 \begin{align*}
-    V(DL(G)) &= E(G) \\
-    E(DL(G)) &= \set{(v,u) \in E(G) \times E(G) \mid \head(v) = \tail(u)}.
+    V(\DL(G)) &= E(G) \\
+    E(\DL(G)) &= \set{(v,u) \in E(G) \times E(G) \mid \head(v) = \tail(u)}.
 \end{align*}
 
 
 \begin{lem}
-    $D_{1,n}$ on $n$:n solmun täydellinen verkko, jossa on kaikki kaaret
-    molempiin suuntiin. Lisäksi
+    $D_{1,n}$ on $n$:n solmun täydellinen verkko, jossa kaaret on suunnattu pienemmästä solmusta isompaan.
+\end{lem}
+
+\begin{proof}
+    Verkon $D_{s,n}$ määritelmä $s$:n arvolla $1$ antaa seuraavan verkon:
+    %
+    \begin{align*}
+        V(D_{1,n}) &= \set{(k) \mid 1 \leq k \leq n} \\
+        E(D_{1,n}) &= \set{((k), (l)) \mid k < l}.
+    \end{align*}
+    %
+    Tässä verkossa jokaisen kahden solmun välillä on kaari tasan yhteen
+    suuntaan.
+\end{proof}
+
+\begin{lem}
+    Verkko $D_{s + 1,n}$ on verkon $D_{s,n}$ kaariverkko. Tarkemmin,
     %
     \begin{equation*}
-        D_{s + 1,n} = DL(D_{s,n}).
+        D_{s + 1,n} = \DL(D_{s,n}).
     \end{equation*}
 \end{lem}
+
+\begin{proof}
+    Ideana on samaistaa kaariverkon $\DL(D_{s,n})$ kaari
+    %
+    \begin{equation*}
+        ((x_1, \dots, x_s), (x_2, \dots, x_s, y))
+    \end{equation*}
+    %
+    verkon $D_{s + 1,n}$ solmun
+    %
+    \begin{equation*}
+        (x_1, \dots, x_s, y)
+    \end{equation*}
+    %
+    kanssa. Määritellään siis verkkojen välille kuvaus
+    %
+    \begin{equation*}
+        \varphi \colon V(\DL(D_{s,n})) \to V(D_{s + 1, n})
+    \end{equation*}
+    %
+    asettamalla
+    %
+    \begin{equation*}
+        \varphi((x_1, \dots, x_s), (x_2, \dots, x_s, y)) = (x_1, \dots, x_s, y).
+    \end{equation*}
+
+    TODO: näytä että $\varphi$ on bijektio ja erityisesti isomorfismi
+
+    TODO: isomorfismi pitänee määritellä
+\end{proof}
 
 \begin{lem}
     \begin{equation*}
