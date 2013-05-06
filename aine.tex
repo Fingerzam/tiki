@@ -70,6 +70,9 @@
 \newcommand{\set}[1]{\left\{ #1 \right\}}
 \newcommand{\nat}{\mathbb{N}}
 
+\newcommand{\from}{\colon}
+\newcommand{\compose}{\circ}
+
 \DeclareMathOperator{\id}{ID}
 
 \DeclareMathOperator{\head}{head}
@@ -86,6 +89,9 @@
     };
 \end{tikzpicture}
 }
+
+\newcommand{\Dsn}{D_{s,n}}
+\newcommand{\Dssn}{D_{s+1,n}}
 
 
 
@@ -432,8 +438,8 @@ Verkon $G$ väritysluku $\chi(G)$ on pienin määrä värejä, jolla sen voi vä
 \section{Sykliä ei voi 3-värittää alle $\log^* n$ kierroksessa}
 
 Väritysluvun $\chi(B_{t,n})$ alaraja todistetaan käyttäen suunnattujen
-verkkojen $D_{s,n}$ perhettä. Suunnatut verkot $D_{s,n}$ liittyvät läheisesti
-naapurustoverkkoihin $B_{t,n}$. Verkon $D_{s,n}$ solmujoukon $V$ muodostavat
+verkkojen $\Dsn$ perhettä. Suunnatut verkot $\Dsn$ liittyvät läheisesti
+naapurustoverkkoihin $B_{t,n}$. Verkon $\Dsn$ solmujoukon $V$ muodostavat
 kaikki vektorit muotoa
 %
 \begin{equation*}
@@ -493,7 +499,7 @@ Tarkemmin ilmaistuna,
 \end{lem}
 
 \begin{proof}
-    Verkon $D_{s,n}$ määritelmä $s$:n arvolla $1$ antaa seuraavan verkon:
+    Verkon $\Dsn$ määritelmä $s$:n arvolla $1$ antaa seuraavan verkon:
     %
     \begin{align*}
         V(D_{1,n}) &= \set{(k) \mid 1 \leq k \leq n} \\
@@ -504,47 +510,203 @@ Tarkemmin ilmaistuna,
     suuntaan.
 \end{proof}
 
+\begin{maar}
+    Kaksi suunnattua verkkoa $G$ ja $H$ ovat \emph{isomorfiset} jos niiden
+    solmujoukkojen välillä on olemassa kuvaus $\varphi \from V(G) \to V(H)$
+    joka toteuttaa seuraavat ehdot
+    %
+    \begin{enumerate}
+        \item $\varphi$ on bijektio
+        \item $(u,v) \in E(G)$ jos ja vain jos $(\varphi(u), \varphi(v)) \in
+            E(H)$.
+    \end{enumerate}
+    %
+    Nämä ehdot toteuttavaa kuvausta kutsutaan \emph{isomorfismiksi}.
+\end{maar}
+
 \begin{lem}
-    Verkko $D_{s + 1,n}$ on verkon $D_{s,n}$ kaariverkko. Tarkemmin,
+    Verkko $\Dssn$ on verkon $\Dsn$ kaariverkko. Tarkemmin,
     %
     \begin{equation*}
-        D_{s + 1,n} = \DL(D_{s,n}).
+        \Dssn = \DL(\Dsn).
     \end{equation*}
 \end{lem}
 
 \begin{proof}
-    Ideana on samaistaa kaariverkon $\DL(D_{s,n})$ kaari
+    Ideana on samaistaa kaariverkon $\DL(\Dsn)$ kaari
     %
     \begin{equation*}
-        ((x_1, \dots, x_s), (x_2, \dots, x_s, y))
+        \big(
+            (x_1, \dots, x_s), (x_2, \dots, x_s, y)
+        \big)
     \end{equation*}
     %
-    verkon $D_{s + 1,n}$ solmun
+    verkon $\Dssn$ solmun $(x_1, \dots, x_s, y)$ kanssa. Määritellään
+    siis verkkojen välille kuvaus
     %
     \begin{equation*}
-        (x_1, \dots, x_s, y)
-    \end{equation*}
-    %
-    kanssa. Määritellään siis verkkojen välille kuvaus
-    %
-    \begin{equation*}
-        \varphi \colon V(\DL(D_{s,n})) \to V(D_{s + 1, n})
+        \varphi \colon V(\DL(\Dsn) \to V(D_{s + 1, n})
     \end{equation*}
     %
     asettamalla
     %
     \begin{equation*}
-        \varphi((x_1, \dots, x_s), (x_2, \dots, x_s, y)) = (x_1, \dots, x_s, y).
+        \varphi\big(
+                   (x_1, \dots, x_s), (x_2, \dots, x_s, y)
+               \big) = (x_1, \dots, x_s, y).
     \end{equation*}
 
-    TODO: näytä että $\varphi$ on bijektio ja erityisesti isomorfismi
+    Näytetään, että $\varphi$ on isomorfismi. Ensinnäkin $\varphi$ on bijektio,
+    sillä sille löytyy seuraava käänteiskuvaus $\psi \from \Dssn \to
+    \DL(\Dsn)$:
+    %
+    \begin{equation*}
+        \psi(x_1, \dots, x_n, x_{n+1}) =
+        \big(
+            (x_1, \dots, x_n), (x_2, \dots, x_{n+1})
+        \big).
+    \end{equation*}
+    %
+    Kuvaus $\psi$ on kuvauksen $\varphi$ käänteiskuvaus, sillä
+    %
+    \begin{align*}
+        (\psi \compose \varphi)\big(
+                                   (x_1, \dots, x_n), (x_2, \dots, x_n, y)
+                               \big)
+            &= \psi\big(
+                       \varphi\big(
+                                  (x_1, \dots, x_n), (x_2, \dots, x_n, y)
+                              \big)
+                   \big) \\
+            &= \psi(x_1, \dots, x_n, y) \\
+            &= \big(
+                   (x_1, \dots, x_n), (x_2, \dots, x_n, y)
+               \big) \\
+\intertext{ja}
+        (\varphi \compose \psi)(x_1, \dots, x_n, x_{n+1})
+            &= \varphi\big(
+                          \psi(x_1, \dots, x_n, x_{n+1})
+                      \big) \\
+            &= \varphi\big(
+                          (x_1, \dots, x_n), (x_2, \dots, x_n, x_{n+1})
+                      \big) \\
+            &= (x_1, \dots, x_n, x_{n+1}).
+    \end{align*}
+    %
+    Vielä täytyy näyttää, että kuvaus toteuttaa isomorfiaehdon. Olkoon
+    %
+    \newcommand{\x}{\bar{x}}
+    \newcommand{\y}{\bar{y}}
+    %TODO: korjaa tasaukset nätimmiks?
+    \begin{align*}
+        \x_1 &= (x_1, \dots, x_n)     \in V(\Dsn), \\
+        \x_2 &= (x_2, \dots, x_{n+1}) \in V(\Dsn), \\
+        \y_1 &= (y_1, \dots, y_n)     \in V(\Dsn) \text{ ja} \\
+        \y_2 &= (y_2, \dots, y_{n+1}) \in V(\Dsn)
+    \end{align*}
+    %
+    verkon $\Dsn$ solmuja. Tällöin erityisesti
+    %
+    \begin{align*}
+        (\x_1,\x_2) &\in V(\DL(\Dsn)) \text{ ja} \\
+        (\y_1,\y_2) &\in V(\DL(\Dsn))
+    \end{align*}
+    %
+    ovat kaariverkon $\DL(\Dsn)$ solmuja. Jos $\big((\x_1, \x_2), (\y_1, \y_2)\big) \in
+    E(\DL(\Dsn))$ on kaariverkon $\DL(\Dsn)$ kaari, niin kaariverkon määritelmän nojalla
+    %
+    \begin{align*}
+        & \head\big((\x_1,\x_2)\big) = \tail\big((\y_1, \y_2)\big) & \implies \\
+        & \x_2 = \y_1                                              & \implies \\
+        & (x_2, \dots, x_{n+1}) = (y_1, \dots, y_n)                & \implies \\
+        & y_1 = x_2, \dots \text{ ja } y_n = x_{n+1}.              &
+    \end{align*}
+    %
+    Koska $\x_1 \in V(\Dsn)$ ja $\y_2 \in V(\Dsn)$, niin
+    $x_1 < y_1 = x_2$ ja $y_n < y_{n+1}$. Tällöin
+    %
+    \begin{align*}
+        \big(
+            \varphi(\x_1, \x_2), \varphi(\y_1, \y_2)
+        \big)
+            &= \big(
+                   (x_1, \dots, x_{n+1}), (y_1, \dots, y_{n+1})
+               \big) \\
+            &= \big(
+                   (x_1, y_1, y_2, \dots, y_n), (y_1, \dots, y_{n+1})
+               \big) \in E(\Dssn).
+    \end{align*}
+    %
+    Ollaan siis näytetty ensimmäinen kahdesta implikaatiosta:
+    %
+    \begin{equation*}
+        \big((\x_1, \x_2), (\y_1, \y_2)\big) \in E(\DL(\Dsn)) \implies
+        \big(\varphi(\x_1, \x_2), \varphi(\y_1, \y_2) \big) \in E(\Dssn).
+    \end{equation*}
 
-    TODO: isomorfismi pitänee määritellä
+    Toisaalta jos
+    %
+    \begin{align*}
+        \x &= (x_1, \dots, \x_{n+1}) \in V(\Dssn) \text{ ja} \\
+        \y &= (y_1, \dots, \y_{n+1}) \in V(\Dssn).
+    \end{align*}
+    %
+    ovat verkon $\Dssn$ solmuja joiden välillä on kaari, eli $(\x, \y) \in
+    E(\Dssn)$, niin tällöin
+    %
+    \begin{equation*}
+        x_2 = y_1, \dots \text{ ja } x_{n+1} = y_n.
+    \end{equation*}
+    %
+    Nyt
+    %
+    \begin{align*}
+        \x_1 &= (x_1, \dots, x_n), \\
+        \x_2 &= (x_2, \dots, x_{n+1}), \\
+        \y_1 &= (y_1, \dots, y_n) \text{ ja } \\
+        \y_2 &= (y_2, \dots, y_{n+1}) \\
+    \end{align*}
+    %
+    ovat verkon $\Dsn$ solmuja joilla pätee
+    %
+    \begin{align*}
+        (\x_1, \x_2) \in E(\Dsn) &\implies (\x_1, \x_2) \in V(\DL(\Dsn)) \text{ ja} \\
+        (\y_1, \y_2) \in E(\Dsn) &\implies (\y_1, \y_2) \in V(\DL(\Dsn)).
+    \end{align*}
+    %
+    Koska $\x_2 = \y_1$, niin kaariverkossa $\DL(\Dsn)$ on kaari
+    %
+    \begin{equation*}
+        \big((\x_1, \x_2), (\y_1, \y_2)\big) \in E(\DL(\Dsn)).
+    \end{equation*}
+    %
+    Koska
+    %
+    \begin{align*}
+        (\x_1, \x_2) &= \varphi^{-1}(\x) \text{ ja} \\
+        (\y_1, \y_2) &= \varphi^{-1}(\y)
+    \end{align*}
+    %
+    niin väite on todistettu. Ollaan siis näytetty, että jos $(\x, \y) \in
+    E(\Dssn)$ on verkon $\Dssn$ kaari, niin sen solmujen alkukuvien välillä on
+    myös kaari. Tarkemmin sanottuna
+    %
+    \begin{equation*}
+        (\x, \y) \in E(\Dssn) \implies \big(
+                                           \varphi^{-1}(\x), \varphi^{-1}(\y)
+                                       \big) \in E(\DL(\Dsn)).
+    \end{equation*}
+
+    Ollaan siis näytetty, että löytyy bijektio $\varphi \from V(\DL(\Dsn)) \to
+    \Dssn$ joka toteuttaa isomorfiaehdon, joten verkot $\DL(\Dsn)$ ja $\Dssn$
+    ovat isomorfisina olennaisesti sama verkko.
 \end{proof}
+
+TODO: todista erikseen, että $D_{2,n} = \DL(\D_{1,n})$?
 
 \begin{lem}
     \begin{equation*}
-        \chi(D_{s + 1,n}) \geq \log \chi(D_{s,n} ).
+        \chi(\Dssn) \geq \log \chi(\Dsn).
     \end{equation*}
 \end{lem}
 
@@ -559,7 +721,7 @@ Tarkemmin ilmaistuna,
 %
 % instead.
 
-\bibliographystyle{babplain}
+\bibliographystyle{babplain-lf}
 \bibliography{references-fi}
 
 
