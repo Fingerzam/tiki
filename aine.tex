@@ -461,17 +461,61 @@ Solmusta $(a_1,\dots,a_s)$ lähtee kaari muotoa
 %
 oleviin solmuihin, joilla $a_s < b \leq n$.
 
-Nyt naapurustoverkko $B_{t,n}$ pitää sisällään aliverkkona suunnatun verkon
-$D_{2t+1,n}$.
+\begin{lem}
+    Naapurustoverkko $B_{t,n}$ pitää sisällään aliverkkona suunnatun verkon
+    $D_{2t+1,n}$.
+\end{lem}
 
-TODO: avaa tätä
+\newcommand{\D}{D_{2t+1,n}}
+\newcommand{\Btn}{B_{t,n}}
+\begin{proof}
+    Olkoon
+    \begin{equation*}
+        \bar{x} = (x_1, \dots, x_{2t+1}) \in V(\D)
+    \end{equation*}
+    verkon $\D$ solmu.  Koska verkossa $\D$ on solmuvektoreilla
+    suuruusjärjestysehto
+    %
+    \begin{equation*}
+        x_1 < x_2 < \dots < x_{2t+1},
+    \end{equation*}
+    %
+    niin erityisesti nämä vektorin alkiot ovat keskenään erisuuria, joten
+    vektori $\bar{x}$ on myös verkon $\Btn$ solmu.
 
-TODO: pitäskö aliverkko määritellä?
+    Lisäksi jos solmulla $\bar{x}$ on verkossa $\D$ naapuri
+    %
+    \begin{equation*}
+            \bar{y} = (x_2, \dots, x_{2t+1}, y) \in V(\D),
+    \end{equation*}
+    %
+    eli verkossa $\D$ on suunnattu kaari $(\bar{x},\bar{y}) \in E(\D)$, niin
+    tällöin myös verkossa $\Btn$ on näiden solmujen välillä kaari. Tämä
+    johtuu siitä, että suunnatun verkon $\D$ kaarien suuruusjärjestysehdon
+    nojalla $y > x_1$, joten erityisesti $y \neq x_1$.
+\end{proof}
 
-Tästä erityisesti seuraa, että $\chi(B_{t,n}) \geq \chi(D_{2t+1})$.
+Tästä erityisesti seuraa, että jokainen verkon $\Btn$ väritys on myös verkon
+$\D$ väritys.
 
-TODO: selvennä tätä
+\begin{lem}
+    \begin{equation*}
+        \chi(\Btn) \geq \chi(\D)
+    \end{equation*}
+\end{lem}
 
+\begin{proof}
+    Olkoon $c \from V(\Btn) \to [k]$ verkon $\Btn$ väritys. Nyt jos
+    %
+    \begin{equation*}
+            (x,y) \in E(\D)
+    \end{equation*}
+    %
+    on verkon $\D$ kaari, niin äskeisen lemman nojalla solmujen $x$ ja
+    $y$ välillä on kaari myös verkossa $\Btn$. Koska $c$ on verkon $\Btn$
+    väritys, niin $c(x) \neq c(y)$. Siis $c$ on väritys myös verkolle $\D$ ja
+    erityisesti verkon $\D$ voi siis myös värittää $k$:lla värillä.
+\end{proof}
 
 
 \subsection{Suunnatun verkon kaariverkko}
@@ -775,11 +819,30 @@ värityslukujen välille.
     \end{align*}
 \end{proof}
 
+Aikaisemmista lemmoista saadaan nyt lopulta verkkojen $\Dsn$ väritysluvulle
+$\chi(\Dsn)$ alaraja.
+
 \begin{kor}
     \begin{equation*}
         \chi(\Dssn) \geq \log \chi(\Dsn).
     \end{equation*}
 \end{kor}
+
+Erityisesti, koska $\chi(D_{1,n}) = n$, niin edellisestä korollaarista seuraa, että
+%
+\begin{align*}
+    \chi(\Dsn) &\geq \log^{(s)} \chi(D_{1,n}) \implies \\
+    \chi(\Dsn) &\geq \log^{(s)} n
+\end{align*}
+
+\begin{lau}
+    Hajautettu algoritmi ei voi värittää $n$:n solmun sykliä kolmella värillä
+    alle $\log^* n$ kierroksessa.
+\end{lau}
+
+\begin{proof}
+    
+\end{proof}
 
 
 % --- Back matter ---
