@@ -69,6 +69,7 @@
 
 \newcommand{\set}[1]{\left\{ #1 \right\}}
 \newcommand{\nat}{\mathbb{N}}
+\newcommand{\powerset}{\mathcal{P}}
 
 \newcommand{\from}{\colon}
 \newcommand{\compose}{\circ}
@@ -704,11 +705,81 @@ Tarkemmin ilmaistuna,
 
 TODO: todista erikseen, että $D_{2,n} = \DL(\D_{1,n})$?
 
+Verkkojen $\Dsn$ välillä on nyt siis tarkkaan tunnettu yhteys, kun $s$:n arvot
+vaihtelevat. Lisäksi verkko $D_{1,n}$ on rakenteeltaan yksinkertainen
+täydellinen verkko. Koska täydellisessä verkossa on kaari verkon jokaisen
+solmuparin välillä, täytyy sen jokaisella solmulla olla eri väri kuin millään
+muulla solmulla. Siispä verkon $\D_{1,n}$ värittämiseen tarvitaan $n$ väriä.
+Tarkemmin ilmaistuna,
+%
+\begin{equation*}
+    \chi(D_{1,n}) = n.
+\end{equation*}
+
+TODO: pitäiskö äskeisen olla huomautus?
+
+Seuraavan lemman avulla saadaan yhteys verkkojen $\Dsn$ ja $\Dssn$
+värityslukujen välille.
+
+\newcommand{\DLG}{\DL(G)}
+
 \begin{lem}
+    Olkoon $G$ kaariverkko. Tällöin
+    %
+    \begin{equation*}
+        \chi(\DLG) \geq \log \chi(G).
+    \end{equation*}
+\end{lem}
+
+\begin{proof}
+    Olkoon $\Psi \from \DLG \to [k]$ kaariverkon $\DLG$ $k$-väritys. Koska
+    verkko $\DLG$ on verkon $G$ kaariverkko, niin kuvaus $\Psi$ antaa
+    jokaiselle verkon $G$ kaarelle värin. Jos $u, v \in E(G)$ ovat verkon $G$
+    perättäisiä kaaria, eli $\head(u) = \tail(v)$, niin $\Psi$ antaa niille eri
+    värit, $\Psi(u) \neq \Psi(v)$.
+
+    Muodostetaan verkolle $G$ väritys $c \from G \to \powerset([k])$ joka
+    värittää $G$:n $2^k$ värillä. Olkoon $x \in V(G)$ verkon $G$ solmu.
+    Määritellään $x$:n väri seuraavasti:
+    %
+    \begin{equation*}
+        c(x) = \set{\Psi(u) \mid \tail(u) = x}.
+    \end{equation*}
+    %
+    Solmun $x$ väri on siis joukko, jossa on kaikkien solmusta $x$ lähtevien
+    kaarten värit värityksessä $\Psi$. Jotta $c$ olisi laillinen väritys, se ei
+    saa antaa samaa väriä kahdelle naapurisolmulle. Olkoon $u = (x,y) \in E(G)$
+    verkon $G$ kaari ja siis $y \in V(G)$ solmun $x$ naapuri. Nyt $\tail(u) =
+    x$, joten $u$:n väri kuuluu $x$:n värijoukkoon. Tarkemmin ilmaistuna,
+    $\Psi(u) \in c(x)$. Toisaalta jos $\Psi(u) \in c(y)$, niin tällöin löytyy
+    kaari $v \in E(G)$, joka lähtee solmusta $y$, eli $\tail(v) = y$ ja lisäksi
+    jolle $\Psi$ antaa saman värin kuin $u$:lle, eli $\Psi(x) = \Psi(y)$. Tämä
+    ei kuitenkaan ole mahdollista, sillä $\head(u) = y = \tail(v)$, jolloin
+    $\Psi$ ei olisikaan laillinen verkon $\DLG$ väritys. Siis $c$ antaa
+    vierekkäisille solmuille aina toisistaan eroavan värin, joten se täyttää
+    väritysehdon.
+
+    TODO: Yllä oleva kappale on pitkä, luettavuutta voisi parantaa ainakin
+    siirtämällä jotain yhtälöympäristöön
+
+    Väritys $c$ antaa verkon $G$ solmuille väriksi jonkin osajoukon värityksen
+    $\Psi$ väreistä. Koska $k$:n alkion joukolla on yhteensä $2^k$ osajoukkoa,
+    niin $c$ värittää verkon $G$ korkeintaan $2^k$ värillä.
+
+    Ollaan siis näytetty, että jos verkon $G$ kaariverkon $\DLG$ voi värittää $k$:lla
+    värillä, niin $G$:n voi värittää $2^k$ värillä. Toisin sanoen
+    %
+    \begin{align*}
+        \chi(G) &\leq 2^{\chi(\DLG)} \implies \\
+        \log \chi(G) &\leq \chi(\DLG)
+    \end{align*}
+\end{proof}
+
+\begin{kor}
     \begin{equation*}
         \chi(\Dssn) \geq \log \chi(\Dsn).
     \end{equation*}
-\end{lem}
+\end{kor}
 
 
 % --- Back matter ---
