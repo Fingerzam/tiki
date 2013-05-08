@@ -152,9 +152,15 @@
 
 \subsection{Verkko}
 
-\emph{Suuntaamaton verkko} on pari $G = (V,E)$, missä $V$ on \emph{solmujoukko}
-ja $E$ on \emph{kaarijoukko}. \emph{Kaari} solmusta $v \in V$ solmuun $u \in V$
-on kaksikko $\set{v,u} \in E$. Kaarta voidaan myös merkitä lyhyemmin $vu$.
+\begin{maar}
+    \emph{Suuntaamaton verkko} on pari $G = (V,E)$, missä $V$ on
+    \emph{solmujoukko} ja $E$ on \emph{kaarijoukko}. \emph{Kaari} solmusta $v
+    \in V$ solmuun $u \in V$ on kaksikko $\set{v,u} \in E$. Kaarta voidaan myös
+    merkitä lyhyemmin $vu$. Jos $G$ on suuntaamaton verkko, niin sen
+    solmujoukkoon voidaan viitata myös merkinnällä $V(G)$ ja kaarijoukkoon
+    merkinnällä $E(G)$.
+\end{maar}
+
 Esimerkiksi verkko $G = (V,E)$, missä
 %
 \begin{align*}
@@ -174,6 +180,14 @@ näyttää seuraavalta
     \end{tikzpicture}
 \end{center}
 
+\begin{maar}
+    Lukujoukosta $\set{1, \dots, k}$ käytetään seuraavaa lyhyempää merkintää:
+    %
+    \begin{equation*}
+        [k] = \set{1, \dots, k}
+    \end{equation*}
+\end{maar}
+
 \subsection{Laskennan malli}
 
 Olkoon $G = (V,E)$ suuntaamaton verkko. Verkon jokaisessa solmussa $v \in V$ on
@@ -187,7 +201,7 @@ kommunikaatiokierroksen aikana jokainen solmu voi:
 \end{enumerate}
 
 Lisäksi jokaiselle solmulle $v \in V$ on annettu yksikäsitteinen tunniste
-$\id(v) \in \set{1,\dots,|V|}$. Laskennan päätyttyä jokaisen solmun tulee
+$\id(v) \in [|V|]$. Laskennan päätyttyä jokaisen solmun tulee
 tietää oma tulosteensa.
 
 TODO: motivointia sille, että tarkastellaan vain kommunikaatiokierrosten
@@ -195,16 +209,18 @@ lukumäärää aikavaativuutena.
 
 \subsection{Verkon väritys}
 
-Verkko on \emph{väritetty}, jos jokaiseen solmuun $v \in V$ on liitetty jokin
-\emph{väri} $c(v) \in \nat$ ja kahdella vierekkäisellä solmulla ei koskaan ole
-samaa väriä.  Tarkemmin, verkon $G = (V,E)$ \emph{solmuväritys} on kuvaus $c :
-V \rightarrow \set{1,\dots,k}$ jollain luonnollisella luvulla $k \in \nat$.
-Lisäksi vaaditaan, että jos verkossa on kaari solmusta $v$ solmuun $u$, eli $vu
-\in E$, niin $c(v) \neq c(u)$.
+\begin{maar}
+    Verkko on \emph{väritetty}, jos jokaiseen solmuun $v \in V$ on liitetty jokin
+    \emph{väri} $c(v) \in \nat$ ja kahdella vierekkäisellä solmulla ei koskaan ole
+    samaa väriä.  Tarkemmin, verkon $G = (V,E)$ \emph{solmuväritys} on kuvaus $c \from
+    V \to \set{1,\dots,k}$ jollain luonnollisella luvulla $k \in \nat$.
+    Lisäksi vaaditaan, että jos verkossa on kaari solmusta $v$ solmuun $u$, eli $vu
+    \in E$, niin $c(v) \neq c(u)$.
 
-Verkon voi värittää $k$:lla värillä jos löytyy yllä olevan ehdon täyttävä
-kuvaus $c : V \rightarrow \set{1,\dots,k}$. Tällaista väritystä kutsutaan
-\emph{$k$-väritykseksi}.
+    Verkon voi värittää $k$:lla värillä jos löytyy yllä olevan ehdon täyttävä
+    kuvaus $c \from V \to [k]$. Tällaista väritystä kutsutaan
+    \emph{$k$-väritykseksi}.
+\end{maar}
 
 \definecolor{color1}{RGB}{166, 206, 227}
 \definecolor{color2}{RGB}{31, 120, 180}
@@ -237,22 +253,23 @@ tietää oma värinsä laskennan päätyttyä.
 
 \subsection{Sykli}
 
-Verkko on \emph{sykli}, jos se on yhtenäinen ja sen jokaisella solmulla on
-tasan kaksi naapuria.
-%
-\begin{center}
-    \begin{tabular}{ccc}
-        \cycleGraph{.95cm}{6} & \cycleGraph{.95cm}{3} & \cycleGraph{.95cm}{9} \\
-    \end{tabular}
-\end{center}
-%
-Tarkemmin sanoen, $n$-sykli, missä $n \geq 3$, on verkko $C_n = (V,E)$ jolla
-%
-\begin{align*}
-    V &= \set{v_1, v_2, \dots, v_n} \\
-    E &= \set{v_iv_{i+1} \mid 1 \leq i < n} \cup \set{v_n v_1}
-\end{align*}
-%
+\begin{maar}
+    Verkko on \emph{sykli}, jos se on yhtenäinen ja sen jokaisella solmulla on
+    tasan kaksi naapuria.
+    %
+    \begin{center}
+        \begin{tabular}{ccc}
+            \cycleGraph{.95cm}{6} & \cycleGraph{.95cm}{3} & \cycleGraph{.95cm}{9} \\
+        \end{tabular}
+    \end{center}
+    %
+    Tarkemmin sanoen, $n$-sykli, missä $n \geq 3$, on verkko $C_n = (V,E)$ jolla
+    %
+    \begin{align*}
+        V &= \set{v_1, v_2, \dots, v_n} \\
+        E &= \set{v_iv_{i+1} \mid 1 \leq i < n} \cup \set{v_n v_1}
+    \end{align*}
+\end{maar}
 
 Syklin voi aina värittää kolmella värillä.
 
@@ -275,16 +292,18 @@ TODO: tälle lähde?
 
 \subsection{Iteroitu logaritmi $\log^*$}
 
-\emph{Iteroitu logaritmi} $\log^*$ kertoo kuinka monta kertaa luvusta täytyy ottaa
-logaritmi, kunnes lopputulos on korkeintaan yksi. Tarkemmin,
+\begin{maar}
+    \emph{Iteroitu logaritmi} $\log^*$ kertoo kuinka monta kertaa luvusta täytyy ottaa
+    logaritmi, kunnes lopputulos on korkeintaan yksi. Tarkemmin,
 
-\begin{equation*}
-    \log^* x =
-      \begin{cases}
-          0,                   &\text{jos } x \leq 1, \\
-          1 + \log^* (\log x), &\text{muutoin.}
-      \end{cases}
-\end{equation*}
+    \begin{equation*}
+        \log^* x =
+          \begin{cases}
+              0,                   &\text{jos } x \leq 1, \\
+              1 + \log^* (\log x), &\text{muutoin.}
+          \end{cases}
+    \end{equation*}
+\end{maar}
 
 Esimerkiksi
 %
@@ -320,12 +339,14 @@ TODO: kuvan polun pituus
 
 \begin{maar}
     Kahden verkon $G$ solmun $u,v \in V(G)$ välinen \emph{etäisyys} verkossa
-    $G$, $d_G(u,v)$, on lyhimmän solmusta $u$ solmuun $v$ kulkevan polun pituus.
+    $G$, on lyhimmän solmusta $u$ solmuun $v$ kulkevan polun pituus.
 \end{maar}
 
-TODO: tarvitaanko notaatiota $d_G(u,v)$?
-
 TODO: kuva lyhimmästä polusta ja etäisyydestä
+
+TODO: Määrittele $k$-ympäristö
+
+TODO: kuvia naapurustoista eri säteillä
 
 Hajautetussa algoritmissa solmu $v \in V$ saa $k$:ssa kierroksessa selville
 oman $k$-ympäristönsä. Toisaalta solmu ei pysty tässä ajassa saamaan mitään
@@ -358,41 +379,62 @@ niin täytyy olla olemassa sellainen funktio $f: [n]^{2k+1} \to [3]$, joka
 tuottaa laillisen 3-värityksen riippumatta siitä miten solmuille on annettu
 tunnisteet.
 
+TODO: onko karteesinen potenssi kohdeyleisölle tuttu?
+
 \subsection{Naapurustoverkot}
 
 TODO: liitä tää syklien näkymiin
 
-Naapurustoverkko $B_{t,n} = (V,E)$, missä $V$ on kaikkien vektoreiden
-$(x_1,\dots,x_{2t+1})$ joukko joilla $x_i$:t ovat keskenään erisuuria
-kokonaislukuja joukosta $[n]$. Verkossa $B_{t,n}$ solmut muotoa
-%
-\begin{equation*}
-    (x_1, \dots, x_{2t+1}) \text{ ja } (y,x_2,\dots,x_{2t})
-\end{equation*}
-%
-ovat naapureita, kun $y \neq x_{2t+1}$.
-
-TODO: esittele $[n]$ merkintä, tai älä käytä sitä ollenkaan
+\newcommand{\Btn}{B_{t,n}}
+\begin{maar}
+    Naapurustoverkko $\Btn = (V,E)$ on verkko, jonka solmujoukon $V$ muodostaa
+    vektoreiden $(x_1,\dots,x_{2t+1})$ joukko, missä $x_i$:t ovat keskenään
+    erisuuria kokonaislukuja joukosta $[n]$.  Verkossa $B_{t,n}$ solmut muotoa
+    %
+    \begin{equation*}
+        (x_1, \dots, x_{2t+1}) \text{ ja } (y,x_2,\dots,x_{2t})
+    \end{equation*}
+    %
+    ovat naapureita, kun $y \neq x_{2t+1}$.
+\end{maar}
 
 TODO: pari kuvaa näistä verkoista pienillä parametrien arvoilla
 
+Naapurustoverkon $\Btn$ solmu on siis syklissä ajetun hajautetun algoritmin
+näkymä $t$ kierroksen jälkeen. Kahden näkymän välillä on naapurustoverkossa
+kaari, jos ne ovat vierekkäisten solmujen näkymät jossain yksikäsitteisillä
+tunnisteilla varustetussa $n$-syklissä.
+
+TODO: havainnollista kuvalla syklin naapurisolmujen näkymiä ja naapurustoverkon
+vastaavia solmuja
+
 \begin{maar}
     Solmun $v \in V(G)$ \emph{asteluku} on sen naapureiden lukumäärä verkossa
-    $G$. Tarkemmin, solmun $v \in V(G)$ asteluku on $|\set{e \in E(G) \mid v
-        \in e}|$.
+    $G$. Tarkemmin, solmun $v \in V(G)$ asteluku on
+    %
+    \begin{equation*}
+            |\set{e \in E(G) \mid v \in e}|.
+    \end{equation*}
 \end{maar}
 
-Verkossa $B_{t,n}$ on $n(n-1)(n-2) \cdots (n-2t)$ solmua ja sen kaikkien
-solmujen asteluku on $2(n-2t-1)$.
+Verkossa $B_{t,n}$ on
+%
+\begin{equation*}
+    n(n-1)(n-2) \cdots (n-2t)
+\end{equation*}
+%
+solmua ja sen kaikkien solmujen asteluku on $2(n-2t-1)$.
+
+%here
 
 TODO: onko asteluvusta puhuminen olennaista?
 
 TODO: epäkonsistenttia: kierrosmäärä on välillä $k$ ja välillä $t$
 
-Hajautettu algoritmi, joka 3-värittää syklin
-$t$ kierroksessa on funktio $c : V(B_{t,n}) \to [3]$.
-
-TODO: tätä vois perustella
+Hajautettu algoritmi, joka 3-värittää syklin $t$ kierroksessa antaa jokaiselle
+solmulle värin tarkastelemalla vain sen $t$-ympäristön tunnisteita.
+Väritysalgoritmi on siis todellisuudessa funktio $c : V(\Btn) \to [3]$, sillä
+naapurustoverkossa $\Btn$ on solmuina kaikki mahdolliset $t$-naapurustot.
 
 Nyt $c$ on myös laillinen 3-väritys verkolle $B_{t,n}$, sillä jos $c$ antaa
 solmuille
@@ -467,7 +509,6 @@ oleviin solmuihin, joilla $a_s < b \leq n$.
 \end{lem}
 
 \newcommand{\D}{D_{2t+1,n}}
-\newcommand{\Btn}{B_{t,n}}
 \begin{proof}
     Olkoon
     \begin{equation*}
