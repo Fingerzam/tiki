@@ -23,11 +23,13 @@
 
 % --- General packages ---
 
-\usepackage[utf8]{inputenc}
+\usepackage[utf8]{luainputenc}
 \usepackage{lmodern}
 \usepackage{microtype}
 \usepackage{amsfonts,amsmath,amssymb,amsthm,booktabs,color,enumitem,graphicx}
 \usepackage[pdftex,hidelinks]{hyperref}
+\usepackage{xifthen}
+\usepackage{luacode}
 
 \usepackage{pgf}
 \usepackage{tikz}
@@ -181,7 +183,7 @@ näyttää seuraavalta
 \end{center}
 
 \begin{maar}
-    Lukujoukosta $\set{1, \dots, k}$ käytetään seuraavaa lyhyempää merkintää:
+    Kaikilla posiitivisilla kokonaisluvuilla $k$ merkitään:
     %
     \begin{equation*}
         [k] = \set{1, \dots, k}
@@ -192,12 +194,12 @@ näyttää seuraavalta
 
 Olkoon $G = (V,E)$ suuntaamaton verkko. Verkon jokaisessa solmussa $v \in V$ on
 tietokone. Laskenta koostuu \emph{kommunikaatiokierroksista}. Yhden
-kommunikaatiokierroksen aikana jokainen solmu voi:
+kommunikaatiokierroksen aikana jokainen solmu voi
 
 \begin{enumerate}
-    \item suorittaa mielivaltaista laskentaa
-    \item lähettää viestin jokaiselle naapurilleen
-    \item vastaanottaa naapureiden lähettämät viestit
+    \item suorittaa mielivaltaista laskentaa,
+    \item lähettää viestin jokaiselle naapurilleen ja
+    \item vastaanottaa naapureiden lähettämät viestit.
 \end{enumerate}
 
 Lisäksi jokaiselle solmulle $v \in V$ on annettu yksikäsitteinen tunniste
@@ -213,7 +215,7 @@ lukumäärää aikavaativuutena.
     Verkko on \emph{väritetty}, jos jokaiseen solmuun $v \in V$ on liitetty jokin
     \emph{väri} $c(v) \in \nat$ ja kahdella vierekkäisellä solmulla ei koskaan ole
     samaa väriä.  Tarkemmin, verkon $G = (V,E)$ \emph{solmuväritys} on kuvaus $c \from
-    V \to \set{1,\dots,k}$ jollain luonnollisella luvulla $k \in \nat$.
+    V \to [k]$ jollain luonnollisella luvulla $k \in \nat$.
     Lisäksi vaaditaan, että jos verkossa on kaari solmusta $v$ solmuun $u$, eli $vu
     \in E$, niin $c(v) \neq c(u)$.
 
@@ -275,19 +277,33 @@ Syklin voi aina värittää kolmella värillä.
 
 TODO: tälle lähde?
 
+\begin{luacode*}
+    function coloredCycle(k)
+        tex.print("\\begin{tikzpicture}", "")
+        tex.print("\\draw circle [radius=.95cm];", "")
+        tex.print(" \\graph [simple,nodes={draw, circle,fill=white}, clockwise, radius=.95cm, n="..k..", empty nodes]{ ", "")
+        for i = 1,k-1 do
+            if math.fmod(i,2) == 0 then
+                tex.print(i.." [fill=color1];", "")
+            else
+                tex.print(i.." [fill=color2];", "")
+            end
+        end
+        tex.print(k.." [fill=color3];", "")
+
+        tex.print("};", "")
+        tex.print("\\end{tikzpicture}", "")
+    end
+\end{luacode*}
+
+\newcommand*\coloredCycle[1]{
+    \luadirect{coloredCycle(tonumber(#1))}
+}
+
 \begin{center}
-    \begin{tikzpicture}
-        \draw circle [radius=.95cm];
-        \graph [simple,nodes={draw, circle,fill=white}, clockwise, radius=.95cm, n=7, empty nodes]{
-            1 [fill=color1];
-            2 [fill=color2];
-            3 [fill=color1];
-            4 [fill=color2];
-            5 [fill=color1];
-            6 [fill=color2];
-            7 [fill=color3];
-        };
-    \end{tikzpicture}
+    \begin{tabular}{ccc}
+        \coloredCycle{6} & \coloredCycle{3} & \coloredCycle{9} \\
+    \end{tabular}
 \end{center}
 
 \subsection{Iteroitu logaritmi $\log^*$}
@@ -322,20 +338,48 @@ logaritmi on siis äärimmäisen hitaasti kasvava funktio.
 
 \begin{maar}
     Verkon $G$ \emph{polku} on jono $P = (p_1, \dots, p_n)$, missä jokainen
-    $p_i \in V(G)$ on verkon $G$ solmu ja lisäksi kahden jonon perättäisen
-    solmun välillä täytyy aina olla kaari. Siis kaikilla $i \in \set{1, \dots,
-        n-1}$ täytyy olla voimassa ehto $u_i u_{i+1} \in E(G)$. Polku $P$ on
-    polku solmusta $p_1$ solmuun $p_n$.
+    $p_i \in V(G)$ on verkon $G$ solmu, kahden jonon perättäisen solmun välillä
+    täytyy aina olla kaari ja lisäksi sama solmu ei saa esiintyä jonossa
+    kahdesti. Siis kaikilla $i \in [n-1]$ täytyy olla voimassa ehto $p_i
+    p_{i+1} \in E(G)$. Lisäksi kaikilla $i,j \in [n], i \neq j$ täytyy olla
+    voimassa ehto $p_i \neq p_j$. Polku $P$ on polku solmusta $p_1$ solmuun
+    $p_n$.
 \end{maar}
 
-TODO: kuva polusta
+\begin{center}
+    \begin{tikzpicture}
+        \graph[nodes={draw,circle, minimum size=7.5mm}, no placement] {
+            1[x=0,y=0];
+            2[x=0,y=1];
+            3[x=0,y=2, very thick];
+            4[x=1,y=1, very thick];
+            5[x=2,y=2];
+            6[x=3,y=1, very thick];
+            7[x=2,y=0, very thick];
+            8[x=3.5,y=2, very thick];
+            9[x=4.5,y=2, very thick];
+            10[x=4,y=0];
+            11[x=5,y=1];
+
+            {1,2} -- 4 -- 5 -- 6 --[very thick] 7;
+            3 --[very thick] 4;
+            3 -- 5;
+            7 --[very thick] 4;
+            6 --[very thick] 8 --[very thick] 9 -- 10 -- 11;
+            6 -- 9 -- 11;
+            6 -- 10;
+        }
+    \end{tikzpicture}
+\end{center}
+
+Yllä olevassa kuvassa on polku $(3,4,7,6,8,9)$ solmusta $3$ solmuun $9$.
 
 \begin{maar}
     Polun $P = (p_1, \dots, p_n)$ pituus on sen kaarten lukumäärä. Siis polun
     $P$ pituus on $n-1$.
 \end{maar}
 
-TODO: kuvan polun pituus
+Edellisen kuvan polun pituus on 5.
 
 \begin{maar}
     Kahden verkon $G$ solmun $u,v \in V(G)$ välinen \emph{etäisyys} verkossa
@@ -383,8 +427,6 @@ TODO: onko karteesinen potenssi kohdeyleisölle tuttu?
 
 \subsection{Naapurustoverkot}
 
-TODO: liitä tää syklien näkymiin
-
 \newcommand{\Btn}{B_{t,n}}
 \begin{maar}
     Naapurustoverkko $\Btn = (V,E)$ on verkko, jonka solmujoukon $V$ muodostaa
@@ -392,7 +434,7 @@ TODO: liitä tää syklien näkymiin
     erisuuria kokonaislukuja joukosta $[n]$.  Verkossa $B_{t,n}$ solmut muotoa
     %
     \begin{equation*}
-        (x_1, \dots, x_{2t+1}) \text{ ja } (y,x_2,\dots,x_{2t})
+        (x_1, \dots, x_{2t+1}) \text{ ja } (y, x_1, x_2, \dots, x_{2t})
     \end{equation*}
     %
     ovat naapureita, kun $y \neq x_{2t+1}$.
@@ -434,7 +476,8 @@ TODO: epäkonsistenttia: kierrosmäärä on välillä $k$ ja välillä $t$
 Hajautettu algoritmi, joka 3-värittää syklin $t$ kierroksessa antaa jokaiselle
 solmulle värin tarkastelemalla vain sen $t$-ympäristön tunnisteita.
 Väritysalgoritmi on siis todellisuudessa funktio $c : V(\Btn) \to [3]$, sillä
-naapurustoverkossa $\Btn$ on solmuina kaikki mahdolliset $t$-naapurustot.
+naapurustoverkossa $\Btn$ on solmuina kaikki mahdolliset $n$-syklin
+$t$-naapurustot.
 
 Nyt $c$ on myös laillinen 3-väritys verkolle $B_{t,n}$, sillä jos $c$ antaa
 solmuille
@@ -470,9 +513,60 @@ ja \emph{häntä}
     \tail(e) = u
 \end{equation*}
 
-TODO: onks kärki ja häntä oikeet käännökset?
-
 TODO: kuva suunnatusta verkosta ja havainnollistava kuva kärjestä ja hännästä
+
+\begin{center}
+    \begin{tikzpicture}[nodes={draw,circle}]
+        \node (a) at (1,1);
+        \node (b) at (2,1);
+        \node (c) at (1,0);
+        \node (d) at (2,0);
+
+        \graph {
+            (a) -> {(b), (c), (d)};
+            (b) -> {(c), (d)};
+            (c) -> (d);
+        }
+    \end{tikzpicture}
+
+    \tikz{
+        \graph[nodes={draw,circle},clockwise, n=5, empty nodes] {
+            1;
+            2;
+            3;
+            4;
+            5;
+            1 -> {2,3,4,5};
+            2 -> {3,4,5};
+            3 -> {4,5};
+            4 -> {5};
+        }
+    }
+
+    \tikz{
+        \graph[nodes={draw,circle},
+               clockwise, n=10,
+               empty nodes
+               ] {
+            12, 13, 14, 15;
+            23,25,24;
+            45,34,35;
+            12 -> {25,24,23};
+            {13,23 } -> {34, 35};
+            {14,24 ,34 } -> 45;
+        }
+    }
+\end{center}
+
+\begin{center}
+    \tikz{
+        \node [label=above:{$\tail(e)$},draw,circle] (tail) at (0,0) {};
+        \node [label=above:{$\head(e)$},draw,circle] (head) at (2,0) {};
+        \graph{
+            (tail) ->[edge label'={$e$}] (head);
+        };
+    }
+\end{center}
 
 \subsection{Väritysluku $\chi(G)$}
 
@@ -482,7 +576,7 @@ Verkon $G$ väritysluku $\chi(G)$ on pienin määrä värejä, jolla sen voi vä
 
 Väritysluvun $\chi(B_{t,n})$ alaraja todistetaan käyttäen suunnattujen
 verkkojen $\Dsn$ perhettä. Suunnatut verkot $\Dsn$ liittyvät läheisesti
-naapurustoverkkoihin $B_{t,n}$. Verkon $\Dsn$ solmujoukon $V$ muodostavat
+naapurustoverkkoihin $B_{t,n}$. Verkon $\Dsn$ solmujoukon $V(\Dsn)$ muodostavat
 kaikki vektorit muotoa
 %
 \begin{equation*}
@@ -789,20 +883,23 @@ Tarkemmin ilmaistuna,
     ovat isomorfisina olennaisesti sama verkko.
 \end{proof}
 
-TODO: todista erikseen, että $D_{2,n} = \DL(\D_{1,n})$?
+TODO: todista erikseen, että $D_{2,n} = \DL(D_{1,n})$?
 
 Verkkojen $\Dsn$ välillä on nyt siis tarkkaan tunnettu yhteys, kun $s$:n arvot
 vaihtelevat. Lisäksi verkko $D_{1,n}$ on rakenteeltaan yksinkertainen
-täydellinen verkko. Koska täydellisessä verkossa on kaari verkon jokaisen
-solmuparin välillä, täytyy sen jokaisella solmulla olla eri väri kuin millään
-muulla solmulla. Siispä verkon $\D_{1,n}$ värittämiseen tarvitaan $n$ väriä.
-Tarkemmin ilmaistuna,
-%
-\begin{equation*}
-    \chi(D_{1,n}) = n.
-\end{equation*}
+täydellinen verkko.
 
-TODO: pitäiskö äskeisen olla huomautus?
+\begin{lem}
+    \begin{equation*}
+        \chi(D_{1,n}) = n.
+    \end{equation*}
+\end{lem}
+
+\begin{proof}
+    Koska täydellisessä verkossa on kaari verkon jokaisen solmuparin välillä,
+    täytyy sen jokaisella solmulla olla eri väri kuin millään muulla solmulla.
+    Siispä verkon $D_{1,n}$ värittämiseen tarvitaan $n$ väriä.
+\end{proof}
 
 Seuraavan lemman avulla saadaan yhteys verkkojen $\Dsn$ ja $\Dssn$
 värityslukujen välille.
@@ -837,16 +934,16 @@ värityslukujen välille.
     saa antaa samaa väriä kahdelle naapurisolmulle. Olkoon $u = (x,y) \in E(G)$
     verkon $G$ kaari ja siis $y \in V(G)$ solmun $x$ naapuri. Nyt $\tail(u) =
     x$, joten $u$:n väri kuuluu $x$:n värijoukkoon. Tarkemmin ilmaistuna,
-    $\Psi(u) \in c(x)$. Toisaalta jos $\Psi(u) \in c(y)$, niin tällöin löytyy
-    kaari $v \in E(G)$, joka lähtee solmusta $y$, eli $\tail(v) = y$ ja lisäksi
-    jolle $\Psi$ antaa saman värin kuin $u$:lle, eli $\Psi(x) = \Psi(y)$. Tämä
-    ei kuitenkaan ole mahdollista, sillä $\head(u) = y = \tail(v)$, jolloin
-    $\Psi$ ei olisikaan laillinen verkon $\DLG$ väritys. Siis $c$ antaa
-    vierekkäisille solmuille aina toisistaan eroavan värin, joten se täyttää
-    väritysehdon.
+    $\Psi(u) \in c(x)$.
 
-    TODO: Yllä oleva kappale on pitkä, luettavuutta voisi parantaa ainakin
-    siirtämällä jotain yhtälöympäristöön
+    Toisaalta jos $\Psi(u) \in c(y)$, niin tällöin löytyy kaari $v \in E(G)$,
+    joka lähtee solmusta $y$, eli $\tail(v) = y$ ja lisäksi jolle $\Psi$ antaa
+    saman värin kuin $u$:lle, eli $\Psi(x) = \Psi(y)$. Tämä ei kuitenkaan ole
+    mahdollista, sillä $\head(u) = y = \tail(v)$, jolloin $\Psi$ ei olisikaan
+    laillinen verkon $\DLG$ väritys. Siis $c$ antaa vierekkäisille solmuille
+    aina toisistaan eroavan värin, joten se täyttää väritysehdon.
+
+    TODO: Tämä on vähän wall of text, voisi keventää jotenkin
 
     Väritys $c$ antaa verkon $G$ solmuille väriksi jonkin osajoukon värityksen
     $\Psi$ väreistä. Koska $k$:n alkion joukolla on yhteensä $2^k$ osajoukkoa,
