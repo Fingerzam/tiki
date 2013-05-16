@@ -35,6 +35,16 @@
 \usepackage{tikz}
 \usetikzlibrary{graphs, graphs.standard}
 \usetikzlibrary{arrows}
+\usetikzlibrary{calc}
+
+\pgfkeys{
+    /aine/.is family, /aine,
+    circle radius/.estore in = \circleradius,
+    hilight radius/.estore in = \hilightradius,
+    node count/.estore in = \nodecount,
+    arc start/.estore in = \arcstart,
+    arc end/.estore in = \arcend
+}
 
 % Automatically set the PDF metadata fields
 \makeatletter
@@ -351,24 +361,24 @@ logaritmi on siis äärimmäisen hitaasti kasvava funktio.
         \graph[nodes={draw,circle, minimum size=7.5mm}, no placement] {
             1[x=0,y=0];
             2[x=0,y=1];
-            3[x=0,y=2, very thick];
-            4[x=1,y=1, very thick];
+            3[x=0,y=2, ultra thick];
+            4[x=1,y=1, ultra thick];
             5[x=2,y=2];
-            6[x=3,y=1, very thick];
-            7[x=2,y=0, very thick];
-            8[x=3.5,y=2, very thick];
-            9[x=4.5,y=2, very thick];
+            6[x=3,y=1, ultra thick];
+            7[x=2,y=0, ultra thick];
+            8[x=3.5,y=2, ultra thick];
+            9[x=4.5,y=2, ultra thick];
             10[x=4,y=0];
             11[x=5,y=1];
 
-            {1,2} -- 4 -- 5 -- 6 --[very thick] 7;
-            3 --[very thick] 4;
+            {1,2} -- 4 -- 5 -- 6 --[ultra thick] 7;
+            3 --[ultra thick] 4;
             3 -- 5;
-            7 --[very thick] 4;
-            6 --[very thick] 8 --[very thick] 9 -- 10 -- 11;
+            7 --[ultra thick] 4;
+            6 --[ultra thick] 8 --[ultra thick] 9 -- 10 -- 11;
             6 -- 9 -- 11;
             6 -- 10;
-        }
+        };
     \end{tikzpicture}
 \end{center}
 
@@ -386,17 +396,139 @@ Edellisen kuvan polun pituus on 5.
     $G$, on lyhimmän solmusta $u$ solmuun $v$ kulkevan polun pituus.
 \end{maar}
 
-TODO: kuva lyhimmästä polusta ja etäisyydestä
+\begin{center}
+    \begin{tikzpicture}
+        \graph[nodes={draw,circle, minimum size=7.5mm}, no placement] {
+            1[x=0,y=0];
+            2[x=0,y=1];
+            3[x=0,y=2, ultra thick];
+            4[x=1,y=1];
+            5[x=2,y=2, ultra thick];
+            6[x=3,y=1, ultra thick];
+            7[x=2,y=0];
+            8[x=3.5,y=2];
+            9[x=4.5,y=2, ultra thick];
+            10[x=4,y=0];
+            11[x=5,y=1];
 
-TODO: Määrittele $k$-ympäristö
+            {1,2} -- 4 -- 5 --[ultra thick] 6 -- 7;
+            3 -- 4;
+            3 --[ultra thick] 5;
+            7 -- 4;
+            6 -- 8 -- 9 -- 10 -- 11;
+            6 --[ultra thick] 9 -- 11;
+            6 -- 10;
+        };
+    \end{tikzpicture}
+\end{center}
 
-TODO: kuvia naapurustoista eri säteillä
+Yllä olevassa kuvassa on lyhin polku solmusta 3 solmuun 9. Solmujen 3 ja 9
+välinen etäisyys on 3.
 
 Hajautetussa algoritmissa solmu $v \in V$ saa $k$:ssa kierroksessa selville
 oman $k$-ympäristönsä. Toisaalta solmu ei pysty tässä ajassa saamaan mitään
 selville solmuista, joiden etäisyys $v$:stä on yli $k$.
 
-TODO: kuvasarja havainnollistamaan tätä
+\begin{tabular}{cc}
+    \begin{tikzpicture}
+        \graph[nodes={draw,circle, minimum size=7.5mm}, no placement] {
+            1[x=0,y=0];
+            2[x=0,y=1];
+            3[x=0,y=2];
+            4[x=1,y=1];
+            5[x=2,y=2];
+            6[x=3,y=1, ultra thick];
+            7[x=2,y=0];
+            8[x=3.5,y=2];
+            9[x=4.5,y=2];
+            10[x=4,y=0];
+            11[x=5,y=1];
+
+            {1,2} -- 4 -- 5 -- 6 -- 7;
+            3 -- 4;
+            3 -- 5;
+            7 -- 4;
+            6 -- 8 -- 9 -- 10 -- 11;
+            6 -- 9 -- 11;
+            6 -- 10;
+        };
+    \end{tikzpicture}
+    &
+    \begin{tikzpicture}
+        \graph[nodes={draw,circle, minimum size=7.5mm}, no placement] {
+            1[x=0,y=0];
+            2[x=0,y=1];
+            3[x=0,y=2];
+            4[x=1,y=1];
+            5[x=2,y=2, ultra thick];
+            6[x=3,y=1, ultra thick];
+            7[x=2,y=0, ultra thick];
+            8[x=3.5,y=2, ultra thick];
+            9[x=4.5,y=2, ultra thick];
+            10[x=4,y=0, ultra thick];
+            11[x=5,y=1];
+
+            {1,2} -- 4 -- 5 --[ultra thick] 6 --[ultra thick] 7;
+            3 -- 4;
+            3 -- 5;
+            7 -- 4;
+            6 --[ultra thick] 8 -- 9 -- 10 -- 11;
+            6 --[ultra thick] 9 -- 11;
+            6 --[ultra thick] 10;
+        };
+    \end{tikzpicture}
+    \\
+    \begin{tikzpicture}
+        \graph[nodes={draw,circle, minimum size=7.5mm}, no placement] {
+            1[x=0,y=0];
+            2[x=0,y=1];
+            3[x=0,y=2, ultra thick];
+            4[x=1,y=1, ultra thick];
+            5[x=2,y=2, ultra thick];
+            6[x=3,y=1, ultra thick];
+            7[x=2,y=0, ultra thick];
+            8[x=3.5,y=2, ultra thick];
+            9[x=4.5,y=2, ultra thick];
+            10[x=4,y=0, ultra thick];
+            11[x=5,y=1, ultra thick];
+
+            {1,2} -- 4 --[ultra thick] 5 --[ultra thick] 6 --[ultra thick] 7;
+            3 -- 4;
+            3 --[ultra thick] 5;
+            7 --[ultra thick] 4;
+            6 --[ultra thick] 8 --[ultra thick] 9 --[ultra thick] 10 --[ultra thick]11;
+            6 --[ultra thick] 9 --[ultra thick] 11;
+            6 --[ultra thick] 10;
+        };
+    \end{tikzpicture}
+    &
+    \begin{tikzpicture}
+        \graph[nodes={draw,circle, minimum size=7.5mm}, no placement] {
+            1[x=0,y=0, ultra thick];
+            2[x=0,y=1, ultra thick];
+            3[x=0,y=2, ultra thick];
+            4[x=1,y=1, ultra thick];
+            5[x=2,y=2, ultra thick];
+            6[x=3,y=1, ultra thick];
+            7[x=2,y=0, ultra thick];
+            8[x=3.5,y=2, ultra thick];
+            9[x=4.5,y=2, ultra thick];
+            10[x=4,y=0, ultra thick];
+            11[x=5,y=1, ultra thick];
+
+            {1,2} --[ultra thick] 4 --[ultra thick] 5 --[ultra thick] 6 --[ultra thick] 7;
+            3 --[ultra thick] 4;
+            3 --[ultra thick] 5;
+            7 --[ultra thick] 4;
+            6 --[ultra thick] 8 --[ultra thick] 9 --[ultra thick] 10 --[ultra thick]11;
+            6 --[ultra thick] 9 --[ultra thick] 11;
+            6 --[ultra thick] 10;
+        };
+    \end{tikzpicture}
+    \\
+\end{tabular}
+
+Solmussa 6 ajetun hajautetun algoritmin näkemä alue nollan, yhden, kahden ja kolmen kierroksen jälkeen.
 
 Hajautettu algoritmi, jonka ajoaika on $k$ kierrosta on siis funktio, jonka
 lähtöjoukkona on solmujen mahdolliset $k$-ympäristöt.
@@ -416,7 +548,59 @@ Toisin sanoen solmun $v_l \in V(C_n)$ tuloste on funktio arvoilta
 %
 Missä yhteen- ja vähennyslaskut suoritetaan modulo $n$.
 
-TODO: Kuvasarja solmun näkymästä syklissä.
+\begin{luacode*}
+    function hilightRadius(args)
+        tex.print("\\draw circle [radius=".. args.circleRadius .."];")
+        tex.print("\\coordinate (a) at (0,0);","")
+        tex.print("\\coordinate (b) at (".. args.circleRadius ..", 0cm);","")
+        tex.print("\\coordinate (x) at ($ (a)!1!".. args.arcStart ..":(b)$);","")
+        tex.print("\\draw (x) arc (".. args.arcStart ..":".. args.arcEnd ..":".. args.circleRadius ..") [visible];", "")
+        tex.print("\\graph [simple,nodes={draw, circle,fill=white}, clockwise, radius=".. args.circleRadius ..", n=" .. args.nodeCount .. ", empty nodes] {", "")
+        local n = args.nodeCount
+        local r = args.hilightRadius
+        for i=1,n do
+            if (i-1 <= r or i > n-r) then
+                tex.print(i .. " [visible];", "")
+            else
+                tex.print(i .. ";", "")
+            end
+        end
+        tex.print("};", "")
+    end
+\end{luacode*}
+
+\newcommand*\hilightRadius[1][]{
+    \pgfkeys{/aine,
+             /circle radius/.default=1.5cm,
+             /arc start/.value required,
+             /arc end/.value required,
+             /hilight radius/.value required,
+             /node count/.value required,
+             #1}
+
+    \luadirect{hilightRadius{circleRadius="\circleradius",
+                             hilightRadius=\hilightradius,
+                             nodeCount=\nodecount,
+                             arcStart=\arcstart,
+                             arcEnd=\arcend}}
+}
+
+\newcommand\circleNeighbourhood[1]{
+    \tikz[x=3.5cm, y=3.5cm,
+          visible/.style={ultra thick}]{
+        \hilightRadius[#1]
+    }
+}
+\begin{tabular}{ccc}
+    \circleNeighbourhood{circle radius=1.5cm, hilight radius=0, node count=13, arc start=90, arc end=90} &
+    \circleNeighbourhood{circle radius=1.5cm, hilight radius=1, node count=13, arc start=65, arc end=115} &
+    \circleNeighbourhood{circle radius=1.5cm, hilight radius=2, node count=13, arc start=35, arc end=145} \\
+
+    \circleNeighbourhood{circle radius=1.5cm, hilight radius=3, node count=13, arc start=0, arc end=175} &
+    \circleNeighbourhood{circle radius=1.5cm, hilight radius=4, node count=13, arc start=-25, arc end=195} &
+    \circleNeighbourhood{circle radius=1.5cm, hilight radius=5, node count=13, arc start=-45, arc end=225} \\
+
+\end{tabular}
 
 Erityisesti jos algoritmi tuottaa 3-värityksen syklissä $k$:ssa kierroksessa,
 niin täytyy olla olemassa sellainen funktio $f: [n]^{2k+1} \to [3]$, joka
@@ -440,15 +624,10 @@ TODO: onko karteesinen potenssi kohdeyleisölle tuttu?
     ovat naapureita, kun $y \neq x_{2t+1}$.
 \end{maar}
 
-TODO: pari kuvaa näistä verkoista pienillä parametrien arvoilla
-
 Naapurustoverkon $\Btn$ solmu on siis syklissä ajetun hajautetun algoritmin
 näkymä $t$ kierroksen jälkeen. Kahden näkymän välillä on naapurustoverkossa
 kaari, jos ne ovat vierekkäisten solmujen näkymät jossain yksikäsitteisillä
 tunnisteilla varustetussa $n$-syklissä.
-
-TODO: havainnollista kuvalla syklin naapurisolmujen näkymiä ja naapurustoverkon
-vastaavia solmuja
 
 \begin{maar}
     Solmun $v \in V(G)$ \emph{asteluku} on sen naapureiden lukumäärä verkossa
@@ -510,23 +689,23 @@ Suunnatussa verkossa on kaari solmusta $u \in V$ solmuun $v \in V$ jos $(u,v)
 ja \emph{häntä}
 %
 \begin{equation*}
-    \tail(e) = u
+    \tail(e) = u.
 \end{equation*}
 
-TODO: kuva suunnatusta verkosta ja havainnollistava kuva kärjestä ja hännästä
+TODO: yksi esimerkki jostain leveemmästä suunnatusta verkosta
 
 \begin{center}
     \begin{tikzpicture}[nodes={draw,circle}]
-        \node (a) at (1,1);
-        \node (b) at (2,1);
-        \node (c) at (1,0);
-        \node (d) at (2,0);
+        \node (a) at (1,1) {};
+        \node (b) at (2,1) {};
+        \node (c) at (1,0) {};
+        \node (d) at (2,0) {};
 
         \graph {
             (a) -> {(b), (c), (d)};
             (b) -> {(c), (d)};
             (c) -> (d);
-        }
+        };
     \end{tikzpicture}
 
     \tikz{
@@ -540,7 +719,7 @@ TODO: kuva suunnatusta verkosta ja havainnollistava kuva kärjestä ja hännäst
             2 -> {3,4,5};
             3 -> {4,5};
             4 -> {5};
-        }
+        };
     }
 
     \tikz{
@@ -568,9 +747,9 @@ TODO: kuva suunnatusta verkosta ja havainnollistava kuva kärjestä ja hännäst
     }
 \end{center}
 
-\subsection{Väritysluku $\chi(G)$}
-
-Verkon $G$ väritysluku $\chi(G)$ on pienin määrä värejä, jolla sen voi värittää.
+\begin{maar}
+    Verkon $G$ \emph{väritysluku} $\chi(G)$ on pienin määrä värejä, jolla sen voi värittää.
+\end{maar}
 
 \section{Sykliä ei voi 3-värittää alle $\log^* n$ kierroksessa}
 
@@ -634,8 +813,9 @@ Tästä erityisesti seuraa, että jokainen verkon $\Btn$ väritys on myös verko
 $\D$ väritys.
 
 \begin{lem}
+    Verkkojen $\Btn$ ja $\D$ väritysluvuille pätee
     \begin{equation*}
-        \chi(\Btn) \geq \chi(\D)
+        \chi(\Btn) \geq \chi(\D).
     \end{equation*}
 \end{lem}
 
