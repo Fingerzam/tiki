@@ -1,6 +1,6 @@
 % --- Template for thesis / report with tktltiki2 class ---
 
-\documentclass[finnish]{tktltiki2}
+\documentclass[finnish,draft]{tktltiki2}
 
 % tktltiki2 automatically loads babel, so you can simply
 % give the language parameter (e.g. finnish, swedish, english, british) as
@@ -150,15 +150,34 @@
 % --- Front matter ---
 
 \maketitle        % title page
-%\makeabstract     % abstract page
+\makeabstract     % abstract page
 
-%\tableofcontents  % table of contents
+\tableofcontents  % table of contents
 \newpage          % clear page after the table of contents
 
 
 % --- Main matter ---
 
 \section{Johdanto}
+
+Hajautettu laskenta tarkastelee asetelmaa, jossa verkon solmut ovat
+tietokoneita jotka voivat kommunikoida keskenään verkon kaaria pitkin.
+Erityisesti hajautetussa asetelmassa tietokoneet haluavat ratkaista
+yhteistyössä jonkin kommunikaatioverkkoa koskevan laskennallisen ongelman.
+
+Paikallinen algoritmi on vakioaikainen hajautettu algoritmi. Jokainen solmu saa
+siis laskettua tällöin oman vastauksensa vakiomäärässä kommunikointikierroksia.
+Tässä työssä esitellään Linialin~\cite{linial92} klassinen todistus sille, että
+hajautettu algoritmi käyttää ainakin $\Omega(\log^* n)$ kommunikaatiokierrosta
+$n$:n solmun sykliverkon värittämiseen kolmella värillä. Tämä tulos siis
+näyttää, ettei ole olemassa paikallista algoritmia joka värittäisi syklin
+kolmella värillä.
+
+Tämä alarajatulos on myös asymptoottisesti tiukka, sillä Colen ja Vishkinin
+algoritmi ~\cite{colevishkin86} värittää $n$-solmuisen syklin hajautetusti
+kolmella värillä $\mathcal{O}(\log^* n)$ kierroksessa. Linialin näyttää
+alarajan deterministiselle algoritmille, mutta Naor~\cite{naor91} on yleistänyt
+tuloksen myös satunnaisuutta käyttäville hajautetuille algoritmeille.
 
 \section{Määritelmiä}
 
@@ -536,7 +555,7 @@ lähtöjoukkona on solmujen mahdolliset $k$-ympäristöt.
 TODO: tää kaipaa varmaan vähän selvennystä
 
 Erityisesti syklissä algoritmi, jonka ajoaika on $k$ kierrosta, tekee
-päätöksensä $k$:n edeltäjän, $k$:n seuraajan ja oman tunnisteensa perusteella.
+pää\-tök\-sen\-sä $k$:n edeltäjän, $k$:n seuraajan ja oman tunnisteensa perusteella.
 Toisin sanoen solmun $v_l \in V(C_n)$ tuloste on funktio arvoilta
 %
 \begin{equation*}
@@ -550,11 +569,15 @@ Missä yhteen- ja vähennyslaskut suoritetaan modulo $n$.
 
 \begin{luacode*}
     function hilightRadius(args)
+        local nodeDistanceInDegrees = 360/args.nodeCount
+        local arcRadiusInDegrees = nodeDistanceInDegrees*args.hilightRadius
+        local startingDegree = 90 - arcRadiusInDegrees
+        local endingDegree = 90 + arcRadiusInDegrees
         tex.print("\\draw circle [radius=".. args.circleRadius .."];")
         tex.print("\\coordinate (a) at (0,0);","")
         tex.print("\\coordinate (b) at (".. args.circleRadius ..", 0cm);","")
-        tex.print("\\coordinate (x) at ($ (a)!1!".. args.arcStart ..":(b)$);","")
-        tex.print("\\draw (x) arc (".. args.arcStart ..":".. args.arcEnd ..":".. args.circleRadius ..") [visible];", "")
+        tex.print("\\coordinate (x) at ($ (a)!1!".. startingDegree ..":(b)$);","")
+        tex.print("\\draw (x) arc (".. startingDegree ..":".. endingDegree ..":".. args.circleRadius ..") [visible];", "")
         tex.print("\\graph [simple,nodes={draw, circle,fill=white}, clockwise, radius=".. args.circleRadius ..", n=" .. args.nodeCount .. ", empty nodes] {", "")
         local n = args.nodeCount
         local r = args.hilightRadius
@@ -572,33 +595,28 @@ Missä yhteen- ja vähennyslaskut suoritetaan modulo $n$.
 \newcommand*\hilightRadius[1][]{
     \pgfkeys{/aine,
              /circle radius/.default=1.5cm,
-             /arc start/.value required,
-             /arc end/.value required,
              /hilight radius/.value required,
              /node count/.value required,
              #1}
 
     \luadirect{hilightRadius{circleRadius="\circleradius",
                              hilightRadius=\hilightradius,
-                             nodeCount=\nodecount,
-                             arcStart=\arcstart,
-                             arcEnd=\arcend}}
+                             nodeCount=\nodecount}}
 }
 
 \newcommand\circleNeighbourhood[1]{
-    \tikz[x=3.5cm, y=3.5cm,
-          visible/.style={ultra thick}]{
+    \tikz[visible/.style={ultra thick}]{
         \hilightRadius[#1]
     }
 }
 \begin{tabular}{ccc}
-    \circleNeighbourhood{circle radius=1.5cm, hilight radius=0, node count=13, arc start=90, arc end=90} &
-    \circleNeighbourhood{circle radius=1.5cm, hilight radius=1, node count=13, arc start=65, arc end=115} &
-    \circleNeighbourhood{circle radius=1.5cm, hilight radius=2, node count=13, arc start=35, arc end=145} \\
+    \circleNeighbourhood{circle radius=1.5cm, hilight radius=0, node count=13} &
+    \circleNeighbourhood{circle radius=1.5cm, hilight radius=1, node count=13} &
+    \circleNeighbourhood{circle radius=1.5cm, hilight radius=2, node count=13} \\
 
-    \circleNeighbourhood{circle radius=1.5cm, hilight radius=3, node count=13, arc start=0, arc end=175} &
-    \circleNeighbourhood{circle radius=1.5cm, hilight radius=4, node count=13, arc start=-25, arc end=195} &
-    \circleNeighbourhood{circle radius=1.5cm, hilight radius=5, node count=13, arc start=-45, arc end=225} \\
+    \circleNeighbourhood{circle radius=1.5cm, hilight radius=3, node count=13} &
+    \circleNeighbourhood{circle radius=1.5cm, hilight radius=4, node count=13} &
+    \circleNeighbourhood{circle radius=1.5cm, hilight radius=5, node count=13} \\
 
 \end{tabular}
 
@@ -654,7 +672,7 @@ TODO: epäkonsistenttia: kierrosmäärä on välillä $k$ ja välillä $t$
 
 Hajautettu algoritmi, joka 3-värittää syklin $t$ kierroksessa antaa jokaiselle
 solmulle värin tarkastelemalla vain sen $t$-ympäristön tunnisteita.
-Väritysalgoritmi on siis todellisuudessa funktio $c : V(\Btn) \to [3]$, sillä
+Vä\-ri\-tys\-al\-go\-rit\-mi on siis todellisuudessa funktio $c : V(\Btn) \to [3]$, sillä
 naapurustoverkossa $\Btn$ on solmuina kaikki mahdolliset $n$-syklin
 $t$-naapurustot.
 
@@ -673,7 +691,7 @@ värin kun syklissä esiintyy pätkä
 \end{equation*}
 
 Siis jos näytetään, että verkkoa $B_{t,n}$ ei voi 3-värittää, niin ei voi
-myöskään olla hajautettua algoritmia joka värittäisi $n$-syklin kolmella
+myös\-kään olla hajautettua algoritmia joka värittäisi $n$-syklin kolmella
 värillä $t$ kierroksessa.
 
 \subsection{Suunnattu verkko}
@@ -788,7 +806,7 @@ oleviin solmuihin, joilla $a_s < b \leq n$.
         \bar{x} = (x_1, \dots, x_{2t+1}) \in V(\D)
     \end{equation*}
     verkon $\D$ solmu.  Koska verkossa $\D$ on solmuvektoreilla
-    suuruusjärjestysehto
+    suu\-ruus\-jär\-jes\-tys\-eh\-to
     %
     \begin{equation*}
         x_1 < x_2 < \dots < x_{2t+1},
@@ -903,7 +921,7 @@ Tarkemmin ilmaistuna,
     \end{equation*}
     %
     verkon $\Dssn$ solmun $(x_1, \dots, x_s, y)$ kanssa. Määritellään
-    siis verkkojen välille kuvaus
+    siis verkkojen vä\-lil\-le kuvaus
     %
     \begin{equation*}
         \varphi \colon V(\DL(\Dsn) \to V(D_{s + 1, n})
@@ -1082,7 +1100,7 @@ täydellinen verkko.
 \end{proof}
 
 Seuraavan lemman avulla saadaan yhteys verkkojen $\Dsn$ ja $\Dssn$
-värityslukujen välille.
+vä\-ri\-tys\-lu\-ku\-jen välille.
 
 \newcommand{\DLG}{\DL(G)}
 
@@ -1138,7 +1156,7 @@ värityslukujen välille.
     \end{align*}
 \end{proof}
 
-Aikaisemmista lemmoista saadaan nyt lopulta verkkojen $\Dsn$ väritysluvulle
+Aikaisemmista lemmoista saadaan nyt lopulta verkkojen $\Dsn$ vä\-ri\-tys\-lu\-vul\-le
 $\chi(\Dsn)$ alaraja.
 
 \begin{kor}
@@ -1192,6 +1210,13 @@ TODO: esittele notaatio $\log^{(n)}$
     kierrosta.
 
 \end{proof}
+
+\section{Yhteenveto}
+
+Hajautettu algoritmi vaatii siis vähintään $\Omega(\log^* n)$ kierrosta
+$n$-syklin vä\-rit\-tä\-mi\-seen kolmella värillä. Tämä alaraja on myös
+asymptoottisesti tiukka, sillä Colen ja Vishkinin algoritmi värittää $n$-syklin
+kolmellä värillä ajassa $\mathcal{O}(\log^* n)$.
 
 
 % --- Back matter ---

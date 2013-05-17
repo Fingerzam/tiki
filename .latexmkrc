@@ -1,2 +1,2 @@
 $pdf_mode = 1;
-$pdflatex = 'pdflatex -interaction=nonstopmode %O %S';
+$pdflatex = 'lualatex -interaction=nonstopmode %O %S';
