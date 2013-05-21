@@ -1,6 +1,6 @@
 % --- Template for thesis / report with tktltiki2 class ---
 
-\documentclass[finnish,draft]{tktltiki2}
+\documentclass[finnish]{tktltiki2}
 
 % tktltiki2 automatically loads babel, so you can simply
 % give the language parameter (e.g. finnish, swedish, english, british) as
@@ -116,8 +116,10 @@
 \title{Paikallisuus hajautetuissa verkkoalgoritmeissa}
 \author{Juhana Laurinharju}
 \date{\today}
-\level{Tieteellinen kirjoittaminen}
-\abstract{Tiivistelmä.}
+\level{Kandidaatintutkielma}
+\abstract{Tässä työssä esitetään Linialin~\cite{linial92} todistus sille, että
+    hajautettu algoritmi käyttää $n$-solmuisen sykliverkon värittämiseen
+    kolmella värillä ainakin $\Omega(\log^* n)$ kommunikaatiokierrosta.}
 
 % The following can be used to specify keywords and classification of the paper:
 
@@ -235,8 +237,12 @@ Lisäksi jokaiselle solmulle $v \in V$ on annettu yksikäsitteinen tunniste
 $\id(v) \in [|V|]$. Laskennan päätyttyä jokaisen solmun tulee
 tietää oma tulosteensa.
 
-TODO: motivointia sille, että tarkastellaan vain kommunikaatiokierrosten
-lukumäärää aikavaativuutena.
+Hajautetun algoritmin aikavaativuutena tarkastellaan kommunikaatiokierrosten
+lukumäärää. Solmujen suorittama mielivaltainen laskenta jä\-te\-tään siis
+aikavaativuusanalyysissä huomiotta. Hajautettua algoritmia ajatellaan ajettavan
+jossain tietokoneverkossa, jolloin viestien välittäminen tietokoneiden välillä
+on huomattavan hidasta verrattuna tietokoneen sisäiseen viestinvälitykseen ja
+laskentaan.
 
 \subsection{Verkon väritys}
 
@@ -304,7 +310,7 @@ tietää oma värinsä laskennan päätyttyä.
 
 Syklin voi aina värittää kolmella värillä.
 
-TODO: tälle lähde?
+%TODO: tälle lähde?
 
 \begin{luacode*}
     function coloredCycle(k)
@@ -552,8 +558,6 @@ Solmussa 6 ajetun hajautetun algoritmin näkemä alue nollan, yhden, kahden ja k
 Hajautettu algoritmi, jonka ajoaika on $k$ kierrosta on siis funktio, jonka
 lähtöjoukkona on solmujen mahdolliset $k$-ympäristöt.
 
-TODO: tää kaipaa varmaan vähän selvennystä
-
 Erityisesti syklissä algoritmi, jonka ajoaika on $k$ kierrosta, tekee
 pää\-tök\-sen\-sä $k$:n edeltäjän, $k$:n seuraajan ja oman tunnisteensa perusteella.
 Toisin sanoen solmun $v_l \in V(C_n)$ tuloste on funktio arvoilta
@@ -620,12 +624,12 @@ Missä yhteen- ja vähennyslaskut suoritetaan modulo $n$.
 
 \end{tabular}
 
-Erityisesti jos algoritmi tuottaa 3-värityksen syklissä $k$:ssa kierroksessa,
-niin täytyy olla olemassa sellainen funktio $f: [n]^{2k+1} \to [3]$, joka
-tuottaa laillisen 3-värityksen riippumatta siitä miten solmuille on annettu
-tunnisteet.
+Erityisesti jos algoritmi tuottaa 3-värityksen $n$-syklissä $k$:ssa
+kierroksessa, niin täytyy olla olemassa sellainen funktio $f: [n]^{2k+1} \to
+[3]$, joka tuottaa laillisen 3-värityksen riippumatta siitä miten solmuille on
+annettu tunnisteet.
 
-TODO: onko karteesinen potenssi kohdeyleisölle tuttu?
+%TODO: onko karteesinen potenssi kohdeyleisölle tuttu?
 
 \subsection{Naapurustoverkot}
 
@@ -664,11 +668,9 @@ Verkossa $B_{t,n}$ on
 %
 solmua ja sen kaikkien solmujen asteluku on $2(n-2t-1)$.
 
-%here
+%TODO: onko asteluvusta puhuminen olennaista?
 
-TODO: onko asteluvusta puhuminen olennaista?
-
-TODO: epäkonsistenttia: kierrosmäärä on välillä $k$ ja välillä $t$
+%TODO: epäkonsistenttia: kierrosmäärä on välillä $k$ ja välillä $t$
 
 Hajautettu algoritmi, joka 3-värittää syklin $t$ kierroksessa antaa jokaiselle
 solmulle värin tarkastelemalla vain sen $t$-ympäristön tunnisteita.
@@ -738,20 +740,6 @@ TODO: yksi esimerkki jostain leveemmästä suunnatusta verkosta
             3 -> {4,5};
             4 -> {5};
         };
-    }
-
-    \tikz{
-        \graph[nodes={draw,circle},
-               clockwise, n=10,
-               empty nodes
-               ] {
-            12, 13, 14, 15;
-            23,25,24;
-            45,34,35;
-            12 -> {25,24,23};
-            {13,23 } -> {34, 35};
-            {14,24 ,34 } -> 45;
-        }
     }
 \end{center}
 
@@ -851,18 +839,18 @@ $\D$ väritys.
 \end{proof}
 
 
-\subsection{Suunnatun verkon kaariverkko}
+\begin{maar}
+    Suunnatun verkon $G$ \emph{kaariverkko} $\DL(G)$ on verkko, jonka solmuja ovat
+    alkuperäisen verkon $G$ kaaret ja kahden kaariverkon solmun
+    %
+    \begin{equation*}
+        u,v \in V(\DL(G)) = E(G)
+    \end{equation*}
+    %
+    välillä on kaari, jos $\head(u) = \tail(v)$.
+\end{maar}
 
-Suunnatun verkon $G$ \emph{kaariverkko} $\DL(G)$ on verkko, jonka solmuja ovat
-alkuperäisen verkon $G$ kaaret ja kahden kaariverkon solmun
-%
-\begin{equation*}
-    u,v \in V(\DL(G)) = E(G)
-\end{equation*}
-%
-välillä on kaari, jos $\head(u) = \tail(v)$.
-
-TODO: havainnollistava kuva
+%TODO: havainnollistava kuva
 
 Tarkemmin ilmaistuna,
 %
@@ -1081,7 +1069,7 @@ Tarkemmin ilmaistuna,
     ovat isomorfisina olennaisesti sama verkko.
 \end{proof}
 
-TODO: todista erikseen, että $D_{2,n} = \DL(D_{1,n})$?
+%TODO: todista erikseen, että $D_{2,n} = \DL(D_{1,n})$?
 
 Verkkojen $\Dsn$ välillä on nyt siis tarkkaan tunnettu yhteys, kun $s$:n arvot
 vaihtelevat. Lisäksi verkko $D_{1,n}$ on rakenteeltaan yksinkertainen
