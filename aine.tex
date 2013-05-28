@@ -386,177 +386,197 @@ logaritmi on siis äärimmäisen hitaasti kasvava funktio.
     $p_n$.
 \end{maar}
 
-\begin{center}
-    \begin{tikzpicture}
-        \graph[nodes={draw,circle, minimum size=7.5mm}, no placement] {
-            1[x=0,y=0];
-            2[x=0,y=1];
-            3[x=0,y=2, ultra thick];
-            4[x=1,y=1, ultra thick];
-            5[x=2,y=2];
-            6[x=3,y=1, ultra thick];
-            7[x=2,y=0, ultra thick];
-            8[x=3.5,y=2, ultra thick];
-            9[x=4.5,y=2, ultra thick];
-            10[x=4,y=0];
-            11[x=5,y=1];
+\begin{figure}[htb]
+    \centering
+    \begin{tabular}{cc}
+            \begin{tikzpicture}
+                \graph[nodes={draw,circle, minimum size=7.5mm}, no placement] {
+                    1[x=0,y=0];
+                    2[x=0,y=1];
+                    3[x=0,y=2, ultra thick];
+                    4[x=1,y=1, ultra thick];
+                    5[x=2,y=2];
+                    6[x=3,y=1, ultra thick];
+                    7[x=2,y=0, ultra thick];
+                    8[x=3.5,y=2, ultra thick];
+                    9[x=4.5,y=2, ultra thick];
+                    10[x=4,y=0];
+                    11[x=5,y=1];
+        
+                    {1,2} -- 4 -- 5 -- 6 --[ultra thick] 7;
+                    3 --[ultra thick] 4;
+                    3 -- 5;
+                    7 --[ultra thick] 4;
+                    6 --[ultra thick] 8 --[ultra thick] 9 -- 10 -- 11;
+                    6 -- 9 -- 11;
+                    6 -- 10;
+                };
+            \end{tikzpicture}
+            &
+            \begin{tikzpicture}
+                \graph[nodes={draw,circle, minimum size=7.5mm}, no placement] {
+                    1[x=0,y=0];
+                    2[x=0,y=1];
+                    3[x=0,y=2, ultra thick];
+                    4[x=1,y=1];
+                    5[x=2,y=2, ultra thick];
+                    6[x=3,y=1, ultra thick];
+                    7[x=2,y=0];
+                    8[x=3.5,y=2];
+                    9[x=4.5,y=2, ultra thick];
+                    10[x=4,y=0];
+                    11[x=5,y=1];
 
-            {1,2} -- 4 -- 5 -- 6 --[ultra thick] 7;
-            3 --[ultra thick] 4;
-            3 -- 5;
-            7 --[ultra thick] 4;
-            6 --[ultra thick] 8 --[ultra thick] 9 -- 10 -- 11;
-            6 -- 9 -- 11;
-            6 -- 10;
-        };
-    \end{tikzpicture}
-\end{center}
+                    {1,2} -- 4 -- 5 --[ultra thick] 6 -- 7;
+                    3 -- 4;
+                    3 --[ultra thick] 5;
+                    7 -- 4;
+                    6 -- 8 -- 9 -- 10 -- 11;
+                    6 --[ultra thick] 9 -- 11;
+                    6 -- 10;
+                };
+            \end{tikzpicture}
+            \\
+            (a) & (b) \\
+    \end{tabular}
 
-Yllä olevassa kuvassa on polku $(3,4,7,6,8,9)$ solmusta $3$ solmuun $9$.
+    \caption{(a) Polku $(3,4,7,6,8,9)$ solmusta 3 solmuun 9. (b) Lyhin polku
+        solmusta 3 solmuun 9.}
+
+    \label{fig:polku}
+\end{figure}
 
 \begin{maar}
     Polun $P = (p_1, \dots, p_n)$ pituus on sen kaarten lukumäärä. Siis polun
     $P$ pituus on $n-1$.
 \end{maar}
 
-Edellisen kuvan polun pituus on 5.
+Kuvan \ref{fig:polku} (a) polun pituus on 5.
 
 \begin{maar}
     Kahden verkon $G$ solmun $u,v \in V(G)$ välinen \emph{etäisyys} verkossa
     $G$, on lyhimmän solmusta $u$ solmuun $v$ kulkevan polun pituus.
 \end{maar}
 
-\begin{center}
-    \begin{tikzpicture}
-        \graph[nodes={draw,circle, minimum size=7.5mm}, no placement] {
-            1[x=0,y=0];
-            2[x=0,y=1];
-            3[x=0,y=2, ultra thick];
-            4[x=1,y=1];
-            5[x=2,y=2, ultra thick];
-            6[x=3,y=1, ultra thick];
-            7[x=2,y=0];
-            8[x=3.5,y=2];
-            9[x=4.5,y=2, ultra thick];
-            10[x=4,y=0];
-            11[x=5,y=1];
+Kuvassa \ref{fig:polku} (b) on havainnollistettu lyhintä polkua solmusta 3
+solmuun 9. Solmujen 3 ja 9 välinen etäisyys on 3.
 
-            {1,2} -- 4 -- 5 --[ultra thick] 6 -- 7;
-            3 -- 4;
-            3 --[ultra thick] 5;
-            7 -- 4;
-            6 -- 8 -- 9 -- 10 -- 11;
-            6 --[ultra thick] 9 -- 11;
-            6 -- 10;
-        };
-    \end{tikzpicture}
-\end{center}
+\begin{figure}[bht]
+    \begin{tabular}{cc}
+        \begin{tikzpicture}
+            \graph[nodes={draw,circle, minimum size=7.5mm}, no placement] {
+                1[x=0,y=0];
+                2[x=0,y=1];
+                3[x=0,y=2];
+                4[x=1,y=1];
+                5[x=2,y=2];
+                6[x=3,y=1, ultra thick];
+                7[x=2,y=0];
+                8[x=3.5,y=2];
+                9[x=4.5,y=2];
+                10[x=4,y=0];
+                11[x=5,y=1];
 
-Yllä olevassa kuvassa on lyhin polku solmusta 3 solmuun 9. Solmujen 3 ja 9
-välinen etäisyys on 3.
+                {1,2} -- 4 -- 5 -- 6 -- 7;
+                3 -- 4;
+                3 -- 5;
+                7 -- 4;
+                6 -- 8 -- 9 -- 10 -- 11;
+                6 -- 9 -- 11;
+                6 -- 10;
+            };
+        \end{tikzpicture}
+        &
+        \begin{tikzpicture}
+            \graph[nodes={draw,circle, minimum size=7.5mm}, no placement] {
+                1[x=0,y=0];
+                2[x=0,y=1];
+                3[x=0,y=2];
+                4[x=1,y=1];
+                5[x=2,y=2, ultra thick];
+                6[x=3,y=1, ultra thick];
+                7[x=2,y=0, ultra thick];
+                8[x=3.5,y=2, ultra thick];
+                9[x=4.5,y=2, ultra thick];
+                10[x=4,y=0, ultra thick];
+                11[x=5,y=1];
+    
+                {1,2} -- 4 -- 5 --[ultra thick] 6 --[ultra thick] 7;
+                3 -- 4;
+                3 -- 5;
+                7 -- 4;
+                6 --[ultra thick] 8 -- 9 -- 10 -- 11;
+                6 --[ultra thick] 9 -- 11;
+                6 --[ultra thick] 10;
+            };
+        \end{tikzpicture}
+        \\
+
+        (a) & (b) \\
+
+        \begin{tikzpicture}
+            \graph[nodes={draw,circle, minimum size=7.5mm}, no placement] {
+                1[x=0,y=0];
+                2[x=0,y=1];
+                3[x=0,y=2, ultra thick];
+                4[x=1,y=1, ultra thick];
+                5[x=2,y=2, ultra thick];
+                6[x=3,y=1, ultra thick];
+                7[x=2,y=0, ultra thick];
+                8[x=3.5,y=2, ultra thick];
+                9[x=4.5,y=2, ultra thick];
+                10[x=4,y=0, ultra thick];
+                11[x=5,y=1, ultra thick];
+    
+                {1,2} -- 4 --[ultra thick] 5 --[ultra thick] 6 --[ultra thick] 7;
+                3 -- 4;
+                3 --[ultra thick] 5;
+                7 --[ultra thick] 4;
+                6 --[ultra thick] 8 --[ultra thick] 9 --[ultra thick] 10 --[ultra thick]11;
+                6 --[ultra thick] 9 --[ultra thick] 11;
+                6 --[ultra thick] 10;
+            };
+        \end{tikzpicture}
+        &
+        \begin{tikzpicture}
+            \graph[nodes={draw,circle, minimum size=7.5mm}, no placement] {
+                1[x=0,y=0, ultra thick];
+                2[x=0,y=1, ultra thick];
+                3[x=0,y=2, ultra thick];
+                4[x=1,y=1, ultra thick];
+                5[x=2,y=2, ultra thick];
+                6[x=3,y=1, ultra thick];
+                7[x=2,y=0, ultra thick];
+                8[x=3.5,y=2, ultra thick];
+                9[x=4.5,y=2, ultra thick];
+                10[x=4,y=0, ultra thick];
+                11[x=5,y=1, ultra thick];
+    
+                {1,2} --[ultra thick] 4 --[ultra thick] 5 --[ultra thick] 6 --[ultra thick] 7;
+                3 --[ultra thick] 4;
+                3 --[ultra thick] 5;
+                7 --[ultra thick] 4;
+                6 --[ultra thick] 8 --[ultra thick] 9 --[ultra thick] 10 --[ultra thick]11;
+                6 --[ultra thick] 9 --[ultra thick] 11;
+                6 --[ultra thick] 10;
+            };
+        \end{tikzpicture}
+        \\
+
+        (c) & (d) \\
+    \end{tabular}
+
+    \caption{(a) Solmun 6 näkemä alue verkossa ennen ensimmäistä kierrosta.
+        (b)-(d) Solmun 6 näkemä alue verkossa kierrosten 1-3 jälkeen. }
+
+    \label{fig:nakyma}
+
+\end{figure}
 
 Hajautetussa algoritmissa solmu $v \in V$ saa $k$:ssa kierroksessa selville
 oman $k$-ympäristönsä. Toisaalta solmu ei pysty tässä ajassa saamaan mitään
-selville solmuista, joiden etäisyys $v$:stä on yli $k$.
-
-\begin{tabular}{cc}
-    \begin{tikzpicture}
-        \graph[nodes={draw,circle, minimum size=7.5mm}, no placement] {
-            1[x=0,y=0];
-            2[x=0,y=1];
-            3[x=0,y=2];
-            4[x=1,y=1];
-            5[x=2,y=2];
-            6[x=3,y=1, ultra thick];
-            7[x=2,y=0];
-            8[x=3.5,y=2];
-            9[x=4.5,y=2];
-            10[x=4,y=0];
-            11[x=5,y=1];
-
-            {1,2} -- 4 -- 5 -- 6 -- 7;
-            3 -- 4;
-            3 -- 5;
-            7 -- 4;
-            6 -- 8 -- 9 -- 10 -- 11;
-            6 -- 9 -- 11;
-            6 -- 10;
-        };
-    \end{tikzpicture}
-    &
-    \begin{tikzpicture}
-        \graph[nodes={draw,circle, minimum size=7.5mm}, no placement] {
-            1[x=0,y=0];
-            2[x=0,y=1];
-            3[x=0,y=2];
-            4[x=1,y=1];
-            5[x=2,y=2, ultra thick];
-            6[x=3,y=1, ultra thick];
-            7[x=2,y=0, ultra thick];
-            8[x=3.5,y=2, ultra thick];
-            9[x=4.5,y=2, ultra thick];
-            10[x=4,y=0, ultra thick];
-            11[x=5,y=1];
-
-            {1,2} -- 4 -- 5 --[ultra thick] 6 --[ultra thick] 7;
-            3 -- 4;
-            3 -- 5;
-            7 -- 4;
-            6 --[ultra thick] 8 -- 9 -- 10 -- 11;
-            6 --[ultra thick] 9 -- 11;
-            6 --[ultra thick] 10;
-        };
-    \end{tikzpicture}
-    \\
-    \begin{tikzpicture}
-        \graph[nodes={draw,circle, minimum size=7.5mm}, no placement] {
-            1[x=0,y=0];
-            2[x=0,y=1];
-            3[x=0,y=2, ultra thick];
-            4[x=1,y=1, ultra thick];
-            5[x=2,y=2, ultra thick];
-            6[x=3,y=1, ultra thick];
-            7[x=2,y=0, ultra thick];
-            8[x=3.5,y=2, ultra thick];
-            9[x=4.5,y=2, ultra thick];
-            10[x=4,y=0, ultra thick];
-            11[x=5,y=1, ultra thick];
-
-            {1,2} -- 4 --[ultra thick] 5 --[ultra thick] 6 --[ultra thick] 7;
-            3 -- 4;
-            3 --[ultra thick] 5;
-            7 --[ultra thick] 4;
-            6 --[ultra thick] 8 --[ultra thick] 9 --[ultra thick] 10 --[ultra thick]11;
-            6 --[ultra thick] 9 --[ultra thick] 11;
-            6 --[ultra thick] 10;
-        };
-    \end{tikzpicture}
-    &
-    \begin{tikzpicture}
-        \graph[nodes={draw,circle, minimum size=7.5mm}, no placement] {
-            1[x=0,y=0, ultra thick];
-            2[x=0,y=1, ultra thick];
-            3[x=0,y=2, ultra thick];
-            4[x=1,y=1, ultra thick];
-            5[x=2,y=2, ultra thick];
-            6[x=3,y=1, ultra thick];
-            7[x=2,y=0, ultra thick];
-            8[x=3.5,y=2, ultra thick];
-            9[x=4.5,y=2, ultra thick];
-            10[x=4,y=0, ultra thick];
-            11[x=5,y=1, ultra thick];
-
-            {1,2} --[ultra thick] 4 --[ultra thick] 5 --[ultra thick] 6 --[ultra thick] 7;
-            3 --[ultra thick] 4;
-            3 --[ultra thick] 5;
-            7 --[ultra thick] 4;
-            6 --[ultra thick] 8 --[ultra thick] 9 --[ultra thick] 10 --[ultra thick]11;
-            6 --[ultra thick] 9 --[ultra thick] 11;
-            6 --[ultra thick] 10;
-        };
-    \end{tikzpicture}
-    \\
-\end{tabular}
+selville solmuista, joiden etäisyys $v$:stä on yli $k$. Kuvassa
+\ref{fig:nakyma} havainnollistetaan solmun näkymää.
 
 \begin{luacode*}
     function hilightRadius(args)
@@ -623,8 +643,6 @@ selville solmuista, joiden etäisyys $v$:stä on yli $k$.
     \label{fig:syklinakyma}
 
 \end{figure}
-
-Solmussa 6 ajetun hajautetun algoritmin näkemä alue nollan, yhden, kahden ja kolmen kierroksen jälkeen.
 
 Hajautettu algoritmi, jonka ajoaika on $k$ kierrosta on siis funktio, jonka
 lähtöjoukkona on solmujen mahdolliset $k$-ympäristöt.
@@ -717,11 +735,11 @@ Siis jos näytetään, että verkkoa $B_{t,n}$ ei voi 3-värittää, niin ei voi
 myös\-kään olla hajautettua algoritmia joka värittäisi $n$-syklin kolmella
 värillä $t$ kierroksessa.
 
-\subsection{Suunnattu verkko}
-
-\emph{Suunnatto verkko} $G = (V,E)$ on verkko, jossa kaarilla on suunta.
-Suunnatussa verkossa on kaari solmusta $u \in V$ solmuun $v \in V$ jos $(u,v)
-\in E$.
+\begin{maar}
+    \emph{Suunnatto verkko} $G = (V,E)$ on verkko, jossa kaarilla on suunta.
+    Suunnatussa verkossa on kaari solmusta $u \in V$ solmuun $v \in V$ jos $(u,v)
+    \in E$.
+\end{maar}
 
 \begin{center}
     \begin{tikzpicture}[nodes={draw,circle}]
@@ -751,17 +769,19 @@ Suunnatussa verkossa on kaari solmusta $u \in V$ solmuun $v \in V$ jos $(u,v)
 %    }
 \end{center}
 
-Suunnatulla kaarella $e = (u,v) \in E$ on \emph{kärki}
-%
-\begin{equation*}
-    \head(e) = v
-\end{equation*}
-%
-ja \emph{häntä}
-%
-\begin{equation*}
-    \tail(e) = u.
-\end{equation*}
+\begin{maar}
+    Suunnatulla kaarella $e = (u,v) \in E$ on \emph{kärki}
+    %
+    \begin{equation*}
+        \head(e) = v
+    \end{equation*}
+    %
+    ja \emph{häntä}
+    %
+    \begin{equation*}
+        \tail(e) = u.
+    \end{equation*}
+\end{maar}
 
 \begin{center}
     \tikz{
