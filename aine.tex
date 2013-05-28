@@ -117,9 +117,14 @@
 \author{Juhana Laurinharju}
 \date{\today}
 \level{Kandidaatintutkielma}
-\abstract{Tässä työssä esitetään Linialin~\cite{linial92} todistus sille, että
-    hajautettu algoritmi käyttää $n$-solmuisen sykliverkon värittämiseen
-    kolmella värillä ainakin $\Omega(\log^* n)$ kommunikaatiokierrosta.}
+
+\abstract{Olkoon $n$ tietokonetta asetettu sykliin siten, että jokainen voi
+    kommunikoida vain kahden naapurinsa kanssa. Verkon värityksessä jokaiselle
+    verkon solmulle täytyy antaa väri siten, että kahdella vierekkäisellä
+    solmulla ei saa olla samaa väriä. Linial~\cite{linial92} on todistanut,
+    että tällöin hajautettu algoritmi, joka haluaa värittää syklin solmut
+    kolmella värillä käyttää tähän vähintään $\Omega(\log^* n)$
+    kommunikaatiokierrosta. Tässä työssä esitellään Linialin alarajatodistus.}
 
 % The following can be used to specify keywords and classification of the paper:
 
@@ -553,24 +558,6 @@ selville solmuista, joiden etäisyys $v$:stä on yli $k$.
     \\
 \end{tabular}
 
-Solmussa 6 ajetun hajautetun algoritmin näkemä alue nollan, yhden, kahden ja kolmen kierroksen jälkeen.
-
-Hajautettu algoritmi, jonka ajoaika on $k$ kierrosta on siis funktio, jonka
-lähtöjoukkona on solmujen mahdolliset $k$-ympäristöt.
-
-Erityisesti syklissä algoritmi, jonka ajoaika on $k$ kierrosta, tekee
-pää\-tök\-sen\-sä $k$:n edeltäjän, $k$:n seuraajan ja oman tunnisteensa perusteella.
-Toisin sanoen solmun $v_l \in V(C_n)$ tuloste on funktio arvoilta
-%
-\begin{equation*}
-    \left(
-        \id(v_{l-k}), \id(v_{l-k+1}), \dots,
-        \id(v_{l-1}), \id(v_l), \id(v_{l+1}), \dots, \id(v_{l+k})
-    \right),
-\end{equation*}
-%
-Missä yhteen- ja vähennyslaskut suoritetaan modulo $n$.
-
 \begin{luacode*}
     function hilightRadius(args)
         local nodeDistanceInDegrees = 360/args.nodeCount
@@ -613,16 +600,50 @@ Missä yhteen- ja vähennyslaskut suoritetaan modulo $n$.
         \hilightRadius[#1]
     }
 }
-\begin{tabular}{ccc}
-    \circleNeighbourhood{circle radius=1.5cm, hilight radius=0, node count=13} &
-    \circleNeighbourhood{circle radius=1.5cm, hilight radius=1, node count=13} &
-    \circleNeighbourhood{circle radius=1.5cm, hilight radius=2, node count=13} \\
+\begin{figure}[tb]
+    \centering
+    \begin{tabular}{ccc}
+        \circleNeighbourhood{circle radius=1.5cm, hilight radius=0, node count=13} &
+        \circleNeighbourhood{circle radius=1.5cm, hilight radius=1, node count=13} &
+        \circleNeighbourhood{circle radius=1.5cm, hilight radius=2, node count=13} \\
 
-    \circleNeighbourhood{circle radius=1.5cm, hilight radius=3, node count=13} &
-    \circleNeighbourhood{circle radius=1.5cm, hilight radius=4, node count=13} &
-    \circleNeighbourhood{circle radius=1.5cm, hilight radius=5, node count=13} \\
+        (a) & (b) & (c) \\
 
-\end{tabular}
+        \circleNeighbourhood{circle radius=1.5cm, hilight radius=3, node count=13} &
+        \circleNeighbourhood{circle radius=1.5cm, hilight radius=4, node count=13} &
+        \circleNeighbourhood{circle radius=1.5cm, hilight radius=5, node count=13} \\
+
+        (d) & (e) & (f) \\
+    \end{tabular}
+
+    \caption{Solmun näkemä alue syklissä: (a) Ennen ensimmäistä
+        kommunikaatiokierrosta solmu näkee vain itsensä. (b)-(f) Solmun näkemä
+        alue 1-5 kommunikaatiokierroksen jälkeen.}
+
+    \label{fig:syklinakyma}
+
+\end{figure}
+
+Solmussa 6 ajetun hajautetun algoritmin näkemä alue nollan, yhden, kahden ja kolmen kierroksen jälkeen.
+
+Hajautettu algoritmi, jonka ajoaika on $k$ kierrosta on siis funktio, jonka
+lähtöjoukkona on solmujen mahdolliset $k$-ympäristöt.
+
+Erityisesti syklissä algoritmi, jonka ajoaika on $k$ kierrosta, tekee
+pää\-tök\-sen\-sä $k$:n edeltäjän, $k$:n seuraajan ja oman tunnisteensa perusteella.
+Toisin sanoen solmun $v_l \in V(C_n)$ tuloste on funktio arvoilta
+%
+\begin{equation*}
+    \left(
+        \id(v_{l-k}), \id(v_{l-k+1}), \dots,
+        \id(v_{l-1}), \id(v_l), \id(v_{l+1}), \dots, \id(v_{l+k})
+    \right),
+\end{equation*}
+%
+Missä yhteen- ja vähennyslaskut suoritetaan modulo $n$. Kuvassa
+\ref{fig:syklinakyma} on havainnollistettu solmun näkemää aluetta syklissä eri
+kommunikaatiokierrosten jälkeen.
+
 
 Erityisesti jos algoritmi tuottaa 3-värityksen $n$-syklissä $k$:ssa
 kierroksessa, niin täytyy olla olemassa sellainen funktio $f: [n]^{2k+1} \to
@@ -700,19 +721,7 @@ värillä $t$ kierroksessa.
 
 \emph{Suunnatto verkko} $G = (V,E)$ on verkko, jossa kaarilla on suunta.
 Suunnatussa verkossa on kaari solmusta $u \in V$ solmuun $v \in V$ jos $(u,v)
-\in E$. Suunnatulla kaarella $e = (u,v) \in E$ on \emph{kärki}
-%
-\begin{equation*}
-    \head(e) = v
-\end{equation*}
-%
-ja \emph{häntä}
-%
-\begin{equation*}
-    \tail(e) = u.
-\end{equation*}
-
-TODO: yksi esimerkki jostain leveemmästä suunnatusta verkosta
+\in E$.
 
 \begin{center}
     \begin{tikzpicture}[nodes={draw,circle}]
@@ -727,21 +736,32 @@ TODO: yksi esimerkki jostain leveemmästä suunnatusta verkosta
             (c) -> (d);
         };
     \end{tikzpicture}
-
-    \tikz{
-        \graph[nodes={draw,circle},clockwise, n=5, empty nodes] {
-            1;
-            2;
-            3;
-            4;
-            5;
-            1 -> {2,3,4,5};
-            2 -> {3,4,5};
-            3 -> {4,5};
-            4 -> {5};
-        };
-    }
+%    \tikz{
+%        \graph[nodes={draw,circle},clockwise, n=5, empty nodes] {
+%            1;
+%            2;
+%            3;
+%            4;
+%            5;
+%            1 -> {2,3,4,5};
+%            2 -> {3,4,5};
+%            3 -> {4,5};
+%            4 -> {5};
+%        };
+%    }
 \end{center}
+
+Suunnatulla kaarella $e = (u,v) \in E$ on \emph{kärki}
+%
+\begin{equation*}
+    \head(e) = v
+\end{equation*}
+%
+ja \emph{häntä}
+%
+\begin{equation*}
+    \tail(e) = u.
+\end{equation*}
 
 \begin{center}
     \tikz{
@@ -752,6 +772,9 @@ TODO: yksi esimerkki jostain leveemmästä suunnatusta verkosta
         };
     }
 \end{center}
+
+
+%TODO: yksi esimerkki jostain leveemmästä suunnatusta verkosta
 
 \begin{maar}
     Verkon $G$ \emph{väritysluku} $\chi(G)$ on pienin määrä värejä, jolla sen voi värittää.
@@ -1144,6 +1167,17 @@ vä\-ri\-tys\-lu\-ku\-jen välille.
     \end{align*}
 \end{proof}
 
+\begin{maar}
+    Luonnollisella luvulla $k \in \nat$ merkitään
+    %
+    \begin{equation*}
+        \log^{(k)} n = \overbrace{\log \log \dots \log}^{k} n.
+    \end{equation*}
+    %
+    Luku $\log^{(k)} n$ on siis se lopputulos joka saadaan, kun luvusta $n$
+    otetaan logaritmi $k$ kertaa.
+\end{maar}
+
 Aikaisemmista lemmoista saadaan nyt lopulta verkkojen $\Dsn$ vä\-ri\-tys\-lu\-vul\-le
 $\chi(\Dsn)$ alaraja.
 
@@ -1159,8 +1193,6 @@ Erityisesti, koska $\chi(D_{1,n}) = n$, niin edellisestä korollaarista seuraa, 
     \chi(\Dsn) &\geq \log^{(s)} \chi(D_{1,n}) \implies \\
     \chi(\Dsn) &\geq \log^{(s)} n
 \end{align*}
-
-TODO: esittele notaatio $\log^{(n)}$
 
 \begin{lau}
     Hajautettu algoritmi ei voi värittää $n$:n solmun sykliä kolmella värillä
@@ -1205,6 +1237,10 @@ Hajautettu algoritmi vaatii siis vähintään $\Omega(\log^* n)$ kierrosta
 $n$-syklin vä\-rit\-tä\-mi\-seen kolmella värillä. Tämä alaraja on myös
 asymptoottisesti tiukka, sillä Colen ja Vishkinin algoritmi värittää $n$-syklin
 kolmellä värillä ajassa $\mathcal{O}(\log^* n)$.
+
+Tässä esitetty todistus ei ota kantaa satunnaisalgoritmeihin, mutta
+Naor~\cite{naor91} on näyttänyt, että vastaava alaraja pätee myös
+satunnaisalgoritmeille.
 
 
 % --- Back matter ---
