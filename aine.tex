@@ -168,7 +168,7 @@
 \section{Johdanto}
 
 Hajautettu laskenta tarkastelee asetelmaa, jossa verkon solmut ovat
-tietokoneita jotka voivat kommunikoida keskenään verkon kaaria pitkin.
+tietokoneita, jotka voivat kommunikoida keskenään verkon kaaria pitkin.
 Erityisesti hajautetussa asetelmassa tietokoneet haluavat ratkaista
 yhteistyössä jonkin kommunikaatioverkkoa koskevan laskennallisen ongelman.
 
@@ -177,14 +177,14 @@ siis laskettua tällöin oman vastauksensa vakiomäärässä kommunikointikierro
 Tässä työssä esitellään Linialin~\cite{linial92} klassinen todistus sille, että
 hajautettu algoritmi käyttää ainakin $\Omega(\log^* n)$ kommunikaatiokierrosta
 $n$:n solmun sykliverkon värittämiseen kolmella värillä. Tämä tulos siis
-näyttää, ettei ole olemassa paikallista algoritmia joka värittäisi syklin
+näyttää, ettei ole olemassa paikallista algoritmia joka, värittäisi syklin
 kolmella värillä.
 
 Tämä alarajatulos on myös asymptoottisesti tiukka, sillä Colen ja Vishkinin
-algoritmi ~\cite{colevishkin86} värittää $n$-solmuisen syklin hajautetusti
-kolmella värillä $\mathcal{O}(\log^* n)$ kierroksessa. Linialin näyttää
-alarajan deterministiselle algoritmille, mutta Naor~\cite{naor91} on yleistänyt
-tuloksen myös satunnaisuutta käyttäville hajautetuille algoritmeille.
+algoritmi~\cite{colevishkin86} värittää $n$-solmuisen syklin hajautetusti
+kolmella värillä $\mathcal{O}(\log^* n)$ kierroksessa. Linial näyttää alarajan
+deterministiselle algoritmille, mutta Naor~\cite{naor91} on yleistänyt tuloksen
+myös satunnaisuutta käyttäville hajautetuille algoritmeille.
 
 \section{Määritelmiä}
 
@@ -204,10 +204,10 @@ Esimerkiksi verkko $G = (V,E)$, missä
 \begin{align*}
     V &= \set{a,b,c,d} \text{ ja}\\
     E &= \set{ \set{a,b}, \set{b,c}, \set{c,a}, \set{a,d}} \\
-      &= \set{ab, bc, ca, ad}
+      &= \set{ab, bc, ca, ad},
 \end{align*}
 %
-näyttää seuraavalta
+näyttää seuraavalta:
 %
 \begin{center}
     \begin{tikzpicture}
@@ -222,7 +222,7 @@ näyttää seuraavalta
     Kaikilla posiitivisilla kokonaisluvuilla $k$ merkitään:
     %
     \begin{equation*}
-        [k] = \set{1, \dots, k}
+        [k] = \set{1, \dots, k}.
     \end{equation*}
 \end{maar}
 
@@ -258,11 +258,11 @@ laskentaan.
     V \to [k]$ jollain luonnollisella luvulla $k \in \nat$.
     Lisäksi vaaditaan, että jos verkossa on kaari solmusta $v$ solmuun $u$, eli $vu
     \in E$, niin $c(v) \neq c(u)$.
-
-    Verkon voi värittää $k$:lla värillä jos löytyy yllä olevan ehdon täyttävä
-    kuvaus $c \from V \to [k]$. Tällaista väritystä kutsutaan
-    \emph{$k$-väritykseksi}.
 \end{maar}
+
+Verkon voi värittää $k$:lla värillä jos löytyy yllä olevan ehdon täyttävä
+kuvaus $c \from V \to [k]$. Tällaista väritystä kutsutaan
+\emph{$k$-väritykseksi}. Esimerkiksi seuraava verkko on 4-väritetty.
 
 \definecolor{color1}{RGB}{166, 206, 227}
 \definecolor{color2}{RGB}{31, 120, 180}
@@ -298,22 +298,38 @@ tietää oma värinsä laskennan päätyttyä.
 \begin{maar}
     Verkko on \emph{sykli}, jos se on yhtenäinen ja sen jokaisella solmulla on
     tasan kaksi naapuria.
-    %
+\end{maar}
+
+Tarkemmin sanoen, $n$-sykli, missä $n \geq 3$, on verkko $C_n = (V,E)$, jolla
+%
+\begin{align*}
+    V &= \set{v_1, v_2, \dots, v_n} \\
+    E &= \set{v_iv_{i+1} \mid 1 \leq i < n} \cup \set{v_n v_1}.
+\end{align*}
+%
+\begin{figure}[t]
     \begin{center}
         \begin{tabular}{ccc}
             \cycleGraph{.95cm}{6} & \cycleGraph{.95cm}{3} & \cycleGraph{.95cm}{9} \\
+            $C_6$ & $C_3$ & $C_9$
         \end{tabular}
+        \caption{Esimerkkejä sykleistä}
     \end{center}
-    %
-    Tarkemmin sanoen, $n$-sykli, missä $n \geq 3$, on verkko $C_n = (V,E)$ jolla
-    %
-    \begin{align*}
-        V &= \set{v_1, v_2, \dots, v_n} \\
-        E &= \set{v_iv_{i+1} \mid 1 \leq i < n} \cup \set{v_n v_1}
-    \end{align*}
-\end{maar}
-
-Syklin voi aina värittää kolmella värillä.
+\end{figure}
+%
+Syklin voi aina värittää kolmella värillä, sillä väritysehdon täyttävä kuvaus
+$c \from V(C_n) \to \set{1,2,3}$ voidaan määritellä esimerkiksi seuraavasti:
+%
+\begin{equation*}
+    c(i) =
+    \begin{cases}
+        3, &\text{jos } i = n, \\
+        1, &\text{jos } i \text{ on parillinen ja} \\
+        2, &\text{jos } i \text{ on pariton.}
+    \end{cases}
+\end{equation*}
+%
+Tällä funktiolla väritetyt syklit näyttävät seuraavalta:
 
 %TODO: tälle lähde?
 
@@ -348,6 +364,8 @@ Syklin voi aina värittää kolmella värillä.
 
 \subsection{Iteroitu logaritmi $\log^*$}
 
+Tässä työssä logaritmien kantaluku on aina 2.
+
 \begin{maar}
     \emph{Iteroitu logaritmi} $\log^*$ kertoo kuinka monta kertaa luvusta täytyy ottaa
     logaritmi, kunnes lopputulos on korkeintaan yksi. Tarkemmin,
@@ -356,7 +374,7 @@ Syklin voi aina värittää kolmella värillä.
         \log^* x =
           \begin{cases}
               0,                   &\text{jos } x \leq 1, \\
-              1 + \log^* (\log x), &\text{muutoin.}
+              1 + \log^* (\log x)  &\text{muutoin.}
           \end{cases}
     \end{equation*}
 \end{maar}
@@ -371,7 +389,7 @@ Esimerkiksi
                  &= 4,
 \end{align*}
 %
-joten $\log^* n$ on arvoltaan pienempi kuin 5 kun $n < 2^{65536}$. Iteroitu
+joten $\log^* n$ on arvoltaan pienempi kuin 5, kun $n < 2^{65536}$. Iteroitu
 logaritmi on siis äärimmäisen hitaasti kasvava funktio.
 
 \subsection{Näkymä}
@@ -454,8 +472,8 @@ logaritmi on siis äärimmäisen hitaasti kasvava funktio.
 Kuvan \ref{fig:polku} (a) polun pituus on 5.
 
 \begin{maar}
-    Kahden verkon $G$ solmun $u,v \in V(G)$ välinen \emph{etäisyys} verkossa
-    $G$, on lyhimmän solmusta $u$ solmuun $v$ kulkevan polun pituus.
+    Verkon $G$ solmujen $u,v \in V(G)$ välinen \emph{etäisyys} on lyhimmän
+    solmusta $u$ solmuun $v$ kulkevan polun pituus.
 \end{maar}
 
 Kuvassa \ref{fig:polku} (b) on havainnollistettu lyhintä polkua solmusta 3
@@ -567,7 +585,7 @@ solmuun 9. Solmujen 3 ja 9 välinen etäisyys on 3.
     \end{tabular}
 
     \caption{(a) Solmun 6 näkemä alue verkossa ennen ensimmäistä kierrosta.
-        (b)-(d) Solmun 6 näkemä alue verkossa kierrosten 1-3 jälkeen. }
+        (b)--(d) Solmun 6 näkemä alue verkossa kierrosten 1--3 jälkeen. }
 
     \label{fig:nakyma}
 
@@ -637,8 +655,8 @@ selville solmuista, joiden etäisyys $v$:stä on yli $k$. Kuvassa
     \end{tabular}
 
     \caption{Solmun näkemä alue syklissä: (a) Ennen ensimmäistä
-        kommunikaatiokierrosta solmu näkee vain itsensä. (b)-(f) Solmun näkemä
-        alue 1-5 kommunikaatiokierroksen jälkeen.}
+        kommunikaatiokierrosta solmu näkee vain itsensä. (b)--(f) Solmun näkemä
+        alue 1--5 kommunikaatiokierroksen jälkeen.}
 
     \label{fig:syklinakyma}
 
@@ -658,13 +676,13 @@ Toisin sanoen solmun $v_l \in V(C_n)$ tuloste on funktio arvoilta
     \right),
 \end{equation*}
 %
-Missä yhteen- ja vähennyslaskut suoritetaan modulo $n$. Kuvassa
+missä yhteen- ja vähennyslaskut suoritetaan modulo $n$. Kuvassa
 \ref{fig:syklinakyma} on havainnollistettu solmun näkemää aluetta syklissä eri
 kommunikaatiokierrosten jälkeen.
 
 
 Erityisesti jos algoritmi tuottaa 3-värityksen $n$-syklissä $k$:ssa
-kierroksessa, niin täytyy olla olemassa sellainen funktio $f: [n]^{2k+1} \to
+kierroksessa, niin täytyy olla olemassa sellainen funktio $f \from [n]^{2k+1} \to
 [3]$, joka tuottaa laillisen 3-värityksen riippumatta siitä miten solmuille on
 annettu tunnisteet.
 
@@ -735,10 +753,12 @@ Siis jos näytetään, että verkkoa $B_{t,n}$ ei voi 3-värittää, niin ei voi
 myös\-kään olla hajautettua algoritmia joka värittäisi $n$-syklin kolmella
 värillä $t$ kierroksessa.
 
+
 \begin{maar}
-    \emph{Suunnatto verkko} $G = (V,E)$ on verkko, jossa kaarilla on suunta.
-    Suunnatussa verkossa on kaari solmusta $u \in V$ solmuun $v \in V$ jos $(u,v)
-    \in E$.
+    \emph{Suunnattu verkko} $G = (V,E)$ on verkko, jossa kaarilla on suunta.
+    Suunnatussa verkossa on kaari solmusta $u \in V$ solmuun $v \in V$ jos
+    $(u,v) \in E$. Suunnatussa verkossa kaari $(u,v) \in E(G)$ piirretään
+    nuolena solmusta $u$ solmuun $v$.
 \end{maar}
 
 \begin{center}
@@ -770,17 +790,8 @@ värillä $t$ kierroksessa.
 \end{center}
 
 \begin{maar}
-    Suunnatulla kaarella $e = (u,v) \in E$ on \emph{kärki}
-    %
-    \begin{equation*}
-        \head(e) = v
-    \end{equation*}
-    %
-    ja \emph{häntä}
-    %
-    \begin{equation*}
-        \tail(e) = u.
-    \end{equation*}
+    Suunnatulla kaarella $e = (u,v) \in E$ on \emph{kärki} $\head(e) = v$ ja
+    \emph{häntä} $\tail(e) = u$.
 \end{maar}
 
 \begin{center}
@@ -826,8 +837,8 @@ Solmusta $(a_1,\dots,a_s)$ lähtee kaari muotoa
 oleviin solmuihin, joilla $a_s < b \leq n$.
 
 \begin{lem}
-    Naapurustoverkko $B_{t,n}$ pitää sisällään aliverkkona suunnatun verkon
-    $D_{2t+1,n}$.
+    Jos suunnatussa verkossa $D_{2t+1,n}$ on kaari $(u,v) \in E(D_{2t+1,n})$, niin
+    naapurustoverkossa $B_{t,n}$ on kaari $\set{u,v} \in E(B_{t,n})$.
 \end{lem}
 
 \newcommand{\D}{D_{2t+1,n}}
@@ -1074,7 +1085,7 @@ Tarkemmin ilmaistuna,
         \x_1 &= (x_1, \dots, x_n), \\
         \x_2 &= (x_2, \dots, x_{n+1}), \\
         \y_1 &= (y_1, \dots, y_n) \text{ ja } \\
-        \y_2 &= (y_2, \dots, y_{n+1}) \\
+        \y_2 &= (y_2, \dots, y_{n+1})
     \end{align*}
     %
     ovat verkon $\Dsn$ solmuja joilla pätee
@@ -1094,7 +1105,7 @@ Tarkemmin ilmaistuna,
     %
     \begin{align*}
         (\x_1, \x_2) &= \varphi^{-1}(\x) \text{ ja} \\
-        (\y_1, \y_2) &= \varphi^{-1}(\y)
+        (\y_1, \y_2) &= \varphi^{-1}(\y),
     \end{align*}
     %
     niin väite on todistettu. Ollaan siis näytetty, että jos $(\x, \y) \in
@@ -1172,7 +1183,7 @@ vä\-ri\-tys\-lu\-ku\-jen välille.
     laillinen verkon $\DLG$ väritys. Siis $c$ antaa vierekkäisille solmuille
     aina toisistaan eroavan värin, joten se täyttää väritysehdon.
 
-    TODO: Tämä on vähän wall of text, voisi keventää jotenkin
+    %TODO: Tämä on vähän wall of text, voisi keventää jotenkin
 
     Väritys $c$ antaa verkon $G$ solmuille väriksi jonkin osajoukon värityksen
     $\Psi$ väreistä. Koska $k$:n alkion joukolla on yhteensä $2^k$ osajoukkoa,
@@ -1183,7 +1194,7 @@ vä\-ri\-tys\-lu\-ku\-jen välille.
     %
     \begin{align*}
         \chi(G) &\leq 2^{\chi(\DLG)} \implies \\
-        \log \chi(G) &\leq \chi(\DLG)
+        \log \chi(G) &\leq \chi(\DLG). \qedhere
     \end{align*}
 \end{proof}
 
@@ -1211,7 +1222,7 @@ Erityisesti, koska $\chi(D_{1,n}) = n$, niin edellisestä korollaarista seuraa, 
 %
 \begin{align*}
     \chi(\Dsn) &\geq \log^{(s)} \chi(D_{1,n}) \implies \\
-    \chi(\Dsn) &\geq \log^{(s)} n
+    \chi(\Dsn) &\geq \log^{(s)} n.
 \end{align*}
 
 \begin{lau}
@@ -1225,7 +1236,7 @@ Erityisesti, koska $\chi(D_{1,n}) = n$, niin edellisestä korollaarista seuraa, 
     edellisten lemmojen tulokset saadaan seuraava yhtälö:
     %
     \begin{equation*}
-        3 \geq \chi(\Btn) \geq D_{2t+1, n} \geq \log^{(2t)} n.
+        3 \geq \chi(\Btn) \geq \chi(D_{2t+1, n}) \geq \log^{(2t)} n.
     \end{equation*}
     %
     Josta voidaan edelleen päätellä seuraavaa:
@@ -1248,7 +1259,6 @@ Erityisesti, koska $\chi(D_{1,n}) = n$, niin edellisestä korollaarista seuraa, 
     Ollaan siis näytetty, että hajautettu algoritmi joka värittää $n$-syklin
     kolmella värillä käyttää siihen aikaa vähintään $\frac{1}{2} \log^* n - 1$
     kierrosta.
-
 \end{proof}
 
 \section{Yhteenveto}
