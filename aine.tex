@@ -927,7 +927,7 @@ Tarkemmin ilmaistuna,
         E(D_{1,n}) &= \set{((k), (l)) \mid k < l}.
     \end{align*}
     %
-    Tässä verkossa jokaisen kahden solmun välillä on kaari tasan yhteen
+    Tässä verkossa jokaisen solmuparin välillä on kaari tasan yhteen
     suuntaan.
 \end{proof}
 
@@ -1033,14 +1033,29 @@ Tarkemmin ilmaistuna,
         (\y_1,\y_2) &\in V(\DL(\Dsn))
     \end{align*}
     %
-    ovat kaariverkon $\DL(\Dsn)$ solmuja. Jos $\big((\x_1, \x_2), (\y_1, \y_2)\big) \in
-    E(\DL(\Dsn))$ on kaariverkon $\DL(\Dsn)$ kaari, niin kaariverkon määritelmän nojalla
+    ovat kaariverkon $\DL(\Dsn)$ solmuja. Jos $\big((\x_1, \x_2), (\y_1,
+    \y_2)\big) \in E(\DL(\Dsn))$ on kaariverkon $\DL(\Dsn)$ kaari, niin
+    kaariverkon määritelmän nojalla
+    %
+    \begin{equation*}
+        \x_2 = \head\big((\x_1,\x_2)\big)
+             = \tail\big((\y_1, \y_2)\big)
+             = \y_1.
+    \end{equation*}
+    %
+    Nyt $\x_2$:n ja $\y_1$:n määritelmistä seuraa, että
+    %
+    \begin{equation*}
+        (x_2, \dots, x_{n+1}) = (y_1, \dots, y_n)
+    \end{equation*}
+    %
+    ja erityisesti
     %
     \begin{align*}
-        & \head\big((\x_1,\x_2)\big) = \tail\big((\y_1, \y_2)\big) & \implies \\
-        & \x_2 = \y_1                                              & \implies \\
-        & (x_2, \dots, x_{n+1}) = (y_1, \dots, y_n)                & \implies \\
-        & y_1 = x_2, \dots \text{ ja } y_n = x_{n+1}.              &
+        y_1 &= x_2\,, \\
+        y_2 &= x_3\,, \\
+            &\hspace{2.2mm}\vdots \\
+        y_n &= x_{n+1}\,.
     \end{align*}
     %
     Koska $\x_1 \in V(\Dsn)$ ja $\y_2 \in V(\Dsn)$, niin
