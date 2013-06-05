@@ -186,6 +186,9 @@ kolmella värillä $\mathcal{O}(\log^* n)$ kierroksessa. Linial näyttää alara
 deterministiselle algoritmille, mutta Naor~\cite{naor91} on yleistänyt tuloksen
 myös satunnaisuutta käyttäville hajautetuille algoritmeille.
 
+Luvussa 2 esitellään tuloksessa todistamiseen tarvittavat määritelmät ja
+luvussa 3 esitetään itse alarajatodistus.
+
 \section{Määritelmiä}
 
 \subsection{Verkko}
@@ -252,12 +255,12 @@ laskentaan.
 \subsection{Verkon väritys}
 
 \begin{maar}
-    Verkko on \emph{väritetty}, jos jokaiseen solmuun $v \in V$ on liitetty jokin
-    \emph{väri} $c(v) \in \nat$ ja kahdella vierekkäisellä solmulla ei koskaan ole
-    samaa väriä.  Tarkemmin, verkon $G = (V,E)$ \emph{solmuväritys} on kuvaus $c \from
-    V \to [k]$ jollain luonnollisella luvulla $k \in \nat$.
-    Lisäksi vaaditaan, että jos verkossa on kaari solmusta $v$ solmuun $u$, eli $vu
-    \in E$, niin $c(v) \neq c(u)$.
+    Verkko on \emph{väritetty}, jos jokaiseen solmuun $v \in V$ on liitetty
+    jokin \emph{väri} $c(v) \in \nat$ ja kahdella vierekkäisellä solmulla ei
+    koskaan ole samaa väriä.  Tarkemmin, verkon $G = (V,E)$ \emph{solmuväritys}
+    on kuvaus $c \from V \to [k]$ jollain luonnollisella luvulla $k \in \nat$.
+    Lisäksi vaaditaan, että jos verkossa on kaari solmusta $v$ solmuun $u$, eli
+    $vu \in E$, niin $c(v) \neq c(u)$.
 \end{maar}
 
 Verkon voi värittää $k$:lla värillä jos löytyy yllä olevan ehdon täyttävä
@@ -369,7 +372,7 @@ Tässä työssä logaritmien kantaluku on aina 2.
 \begin{maar}
     \emph{Iteroitu logaritmi} $\log^*$ kertoo kuinka monta kertaa luvusta täytyy ottaa
     logaritmi, kunnes lopputulos on korkeintaan yksi. Tarkemmin,
-
+    %
     \begin{equation*}
         \log^* x =
           \begin{cases}
@@ -941,9 +944,12 @@ Tarkemmin ilmaistuna,
         \item $(u,v) \in E(G)$ jos ja vain jos $(\varphi(u), \varphi(v)) \in
             E(H)$.
     \end{enumerate}
-    %
-    Nämä ehdot toteuttavaa kuvausta kutsutaan \emph{isomorfismiksi}.
 \end{maar}
+
+Nämä ehdot toteuttavaa kuvausta kutsutaan \emph{isomorfismiksi}. Isomorfiset
+verkot ovat rakenteeltaan identtisen ja eroavat toisistaan vain solmujen
+nimeämisen osalta. Jos kaksi verkkoa ovat isomorfiset niin ne ovat siis
+olennaisesti sama verkko.
 
 \begin{lem}
     Verkko $\Dssn$ on verkon $\Dsn$ kaariverkko. Tarkemmin,
