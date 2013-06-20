@@ -36,6 +36,7 @@
 \usetikzlibrary{graphs, graphs.standard}
 \usetikzlibrary{arrows}
 \usetikzlibrary{calc}
+\usetikzlibrary{decorations.markings}
 
 \pgfkeys{
     /aine/.is family, /aine,
@@ -121,14 +122,15 @@
 \abstract{Olkoon $n$ tietokonetta asetettu sykliin siten, että jokainen voi
     kommunikoida vain kahden naapurinsa kanssa. Verkon värityksessä jokaiselle
     verkon solmulle täytyy antaa väri siten, että kahdella vierekkäisellä
-    solmulla ei saa olla samaa väriä. Linial~\cite{linial92} on todistanut,
-    että tällöin hajautettu algoritmi, joka haluaa värittää syklin solmut
-    kolmella värillä käyttää tähän vähintään $\Omega(\log^* n)$
-    kommunikaatiokierrosta. Tässä työssä esitellään Linialin alarajatodistus.}
+    solmulla ei saa olla samaa väriä. Linial (1992) on todistanut, että tällöin
+    hajautettu algoritmi, joka haluaa värittää syklin solmut kolmella värillä,
+    käyttää tähän pahimmassa tapauksessa vähintään $\Omega(\log^* n)$
+    kommunikaatiokierrosta. Tässä työssä esitellään Linialin alarajatodistus.
+}
 
 % The following can be used to specify keywords and classification of the paper:
 
-%\keywords{avainsana 1, avainsana 2, avainsana 3}
+\keywords{Hajautetut algoritmit, Verkon väritys}
 %\classification{} % classification according to ACM Computing Classification System (http://www.acm.org/about/class/)
                   % This is probably mostly relevant for computer scientists
 
@@ -171,6 +173,9 @@ Hajautettu laskenta tarkastelee asetelmaa, jossa verkon solmut ovat
 tietokoneita, jotka voivat kommunikoida keskenään verkon kaaria pitkin.
 Erityisesti hajautetussa asetelmassa tietokoneet haluavat ratkaista
 yhteistyössä jonkin kommunikaatioverkkoa koskevan laskennallisen ongelman.
+Hajautettu algoritmi voi lähettää ja vastaanottaa viestejä synkronoiduissa
+kommunikaatiokierroksissa. Algoritmin suoritusaikana tarkastellaan
+kommunikaatiokierrosten lukumäärää.
 
 Paikallinen algoritmi on vakioaikainen hajautettu algoritmi. Jokainen solmu saa
 siis laskettua tällöin oman vastauksensa vakiomäärässä kommunikointikierroksia.
@@ -269,8 +274,13 @@ kuvaus $c \from V \to [k]$. Tällaista väritystä kutsutaan
 
 \definecolor{color1}{RGB}{166, 206, 227}
 \definecolor{color2}{RGB}{31, 120, 180}
-\definecolor{color3}{RGB}{178, 223, 138}
-\definecolor{color4}{RGB}{51, 160, 4}
+\definecolor{color3}{RGB}{178, 223, 138}%{51, 160, 4}
+\definecolor{color4}{RGB}{255, 255, 255}
+
+%{230, 97, 1}
+%{253, 184, 99}
+%{178, 171, 210}
+%{94, 60, 153}
 
 \begin{center}
     \begin{tikzpicture}[nodes={draw, circle, inner sep=.13cm}]
@@ -303,7 +313,7 @@ tietää oma värinsä laskennan päätyttyä.
     tasan kaksi naapuria.
 \end{maar}
 
-Tarkemmin sanoen, $n$-sykli, missä $n \geq 3$, on verkko $C_n = (V,E)$, jolla
+Toisin sanoen, $n$-sykli, missä $n \geq 3$, on verkko $C_n = (V,E)$, jolla
 %
 \begin{align*}
     V &= \set{v_1, v_2, \dots, v_n} \\
@@ -324,11 +334,11 @@ Syklin voi aina värittää kolmella värillä, sillä väritysehdon täyttävä
 $c \from V(C_n) \to \set{1,2,3}$ voidaan määritellä esimerkiksi seuraavasti:
 %
 \begin{equation*}
-    c(i) =
+    c(v_i) =
     \begin{cases}
         3, &\text{jos } i = n, \\
-        1, &\text{jos } i \text{ on parillinen ja} \\
-        2, &\text{jos } i \text{ on pariton.}
+        1, &\text{jos } i < n \text{ ja } i \text{ on parillinen ja} \\
+        2, &\text{jos } i < n \text{ ja } i \text{ on pariton.}
     \end{cases}
 \end{equation*}
 %
@@ -398,11 +408,11 @@ logaritmi on siis äärimmäisen hitaasti kasvava funktio.
 \subsection{Näkymä}
 
 \begin{maar}
-    Verkon $G$ \emph{polku} on jono $P = (p_1, \dots, p_n)$, missä jokainen
+    Verkon $G$ \emph{polku} on jono $P = (p_0, \dots, p_n)$, missä jokainen
     $p_i \in V(G)$ on verkon $G$ solmu, kahden jonon perättäisen solmun välillä
     täytyy aina olla kaari ja lisäksi sama solmu ei saa esiintyä jonossa
-    kahdesti. Siis kaikilla $i \in [n-1]$ täytyy olla voimassa ehto $p_i
-    p_{i+1} \in E(G)$. Lisäksi kaikilla $i,j \in [n], i \neq j$ täytyy olla
+    kahdesti. Siis kaikilla $i \in \set{0, \dots, n-1}$ täytyy olla voimassa ehto $p_i
+    p_{i+1} \in E(G)$. Lisäksi kaikilla $i,j \in \set{0,\dots,n}, i \neq j$ täytyy olla
     voimassa ehto $p_i \neq p_j$. Polku $P$ on polku solmusta $p_1$ solmuun
     $p_n$.
 \end{maar}
@@ -468,18 +478,18 @@ logaritmi on siis äärimmäisen hitaasti kasvava funktio.
 \end{figure}
 
 \begin{maar}
-    Polun $P = (p_1, \dots, p_n)$ pituus on sen kaarten lukumäärä. Siis polun
-    $P$ pituus on $n-1$.
+    Polun $P = (p_0, \dots, p_n)$ pituus on sen kaarten lukumäärä. Siis polun
+    $P$ pituus on $n$.
 \end{maar}
 
-Kuvan \ref{fig:polku} (a) polun pituus on 5.
+Kuvan \ref{fig:polku}a polun pituus on 5.
 
 \begin{maar}
     Verkon $G$ solmujen $u,v \in V(G)$ välinen \emph{etäisyys} on lyhimmän
     solmusta $u$ solmuun $v$ kulkevan polun pituus.
 \end{maar}
 
-Kuvassa \ref{fig:polku} (b) on havainnollistettu lyhintä polkua solmusta 3
+Kuvassa \ref{fig:polku}b on havainnollistettu lyhintä polkua solmusta 3
 solmuun 9. Solmujen 3 ja 9 välinen etäisyys on 3.
 
 \begin{figure}[bht]
@@ -665,18 +675,17 @@ selville solmuista, joiden etäisyys $v$:stä on yli $k$. Kuvassa
 
 \end{figure}
 
-Hajautettu algoritmi, jonka ajoaika on $k$ kierrosta on siis funktio, jonka
-lähtöjoukkona on solmujen mahdolliset $k$-ympäristöt.
-
-Erityisesti syklissä algoritmi, jonka ajoaika on $k$ kierrosta, tekee
-pää\-tök\-sen\-sä $k$:n edeltäjän, $k$:n seuraajan ja oman tunnisteensa perusteella.
-Toisin sanoen solmun $v_l \in V(C_n)$ tuloste on funktio arvoilta
+Hajautettu algoritmi, jonka ajoaika on $k$ kierrosta, on siis funktio, jonka
+lähtöjoukkona on solmujen mahdolliset $k$-ympäristöt.  Erityisesti syklissä
+algoritmi, jonka ajoaika on $k$ kierrosta, tekee pää\-tök\-sen\-sä $k$:n
+edeltäjän, $k$:n seuraajan ja oman tunnisteensa perusteella.  Toisin sanoen
+solmun $v_l \in V(C_n)$ tuloste on funktio arvoilta
 %
 \begin{equation*}
-    \left(
+    \bigl(
         \id(v_{l-k}), \id(v_{l-k+1}), \dots,
         \id(v_{l-1}), \id(v_l), \id(v_{l+1}), \dots, \id(v_{l+k})
-    \right),
+    \bigr),
 \end{equation*}
 %
 missä yhteen- ja vähennyslaskut suoritetaan modulo $n$. Kuvassa
@@ -716,7 +725,9 @@ tunnisteilla varustetussa $n$-syklissä.
     $G$. Tarkemmin, solmun $v \in V(G)$ asteluku on
     %
     \begin{equation*}
-            |\set{e \in E(G) \mid v \in e}|.
+        \bigl|
+          \set{e \in E(G) \mid v \in e}
+        \bigr|.
     \end{equation*}
 \end{maar}
 
@@ -734,25 +745,30 @@ solmua ja sen kaikkien solmujen asteluku on $2(n-2t-1)$.
 
 Hajautettu algoritmi, joka 3-värittää syklin $t$ kierroksessa antaa jokaiselle
 solmulle värin tarkastelemalla vain sen $t$-ympäristön tunnisteita.
-Vä\-ri\-tys\-al\-go\-rit\-mi on siis todellisuudessa funktio $c : V(\Btn) \to [3]$, sillä
-naapurustoverkossa $\Btn$ on solmuina kaikki mahdolliset $n$-syklin
+Vä\-ri\-tys\-al\-go\-rit\-mi on siis funktio $c \from V(\Btn) \to
+[3]$, sillä naapurustoverkossa $\Btn$ on solmuina kaikki mahdolliset $n$-syklin
 $t$-naapurustot.
 
-Nyt $c$ on myös laillinen 3-väritys verkolle $B_{t,n}$, sillä jos $c$ antaa
+Nyt $c$ on myös laillinen 3-väritys verkolle $B_{t,n}$, sillä jos $c$ antaisi
 solmuille
 %
 \begin{equation*}
     (x_1, \dots, x_{2t}, x_{2t+1}) \text{ ja } (y,x_1,\dots,x_{2t})
 \end{equation*}
 %
-saman värin, niin se antaa myös syklissa kahdelle vierekkäiselle solmulle saman
-värin kun syklissä esiintyy pätkä
+saman värin, niin se antaisi myös syklissa kahdelle vierekkäiselle solmulle
+saman värin kun syklissä esiintyy pätkä
 %
 \begin{equation*}
     y, x_1, x_2, \dots, x_{2t+1}.
 \end{equation*}
+%
+Tämä olisi kuitenkin ristiriidassa sen kanssa, että $c$ onnistuisi värittämään
+$n$-syklin $t$ kierroksessa kolmella värillä. Siis algoritmi joka värittää
+$n$-syklin kolmella värillä $t$ kierroksessa värittää myös naapurustoverkon
+$\Btn$ kolmella värillä.
 
-Siis jos näytetään, että verkkoa $B_{t,n}$ ei voi 3-värittää, niin ei voi
+Erityisesti, jos voidaan näyttää, että verkkoa $B_{t,n}$ ei voi 3-värittää, niin ei voi
 myös\-kään olla hajautettua algoritmia joka värittäisi $n$-syklin kolmella
 värillä $t$ kierroksessa.
 
@@ -764,6 +780,13 @@ värillä $t$ kierroksessa.
     nuolena solmusta $u$ solmuun $v$.
 \end{maar}
 
+\tikzset{
+  big arrow/.style={
+    decoration={markings,mark=at position 1 with {\arrow[scale=2,#1]{>}}},
+    postaction={decorate},
+    shorten >=0.4pt},
+  big arrow/.default=black}
+
 \begin{center}
     \begin{tikzpicture}[nodes={draw,circle}]
         \node (a) at (1,1) {};
@@ -771,11 +794,13 @@ värillä $t$ kierroksessa.
         \node (c) at (1,0) {};
         \node (d) at (2,0) {};
 
-        \graph {
-            (a) -> {(b), (c), (d)};
-            (b) -> {(c), (d)};
-            (c) -> (d);
-        };
+        \draw[big arrow] (a) -> (b);
+        \draw[big arrow] (a) -> (c);
+        \draw[big arrow] (a) -> (d);
+        \draw[big arrow] (b) -> (c);
+        \draw[big arrow] (b) -> (d);
+        \draw[big arrow] (c) -> (d);
+
     \end{tikzpicture}
 %    \tikz{
 %        \graph[nodes={draw,circle},clockwise, n=5, empty nodes] {
@@ -801,6 +826,7 @@ värillä $t$ kierroksessa.
     \tikz{
         \node [label=above:{$\tail(e)$},draw,circle] (tail) at (0,0) {};
         \node [label=above:{$\head(e)$},draw,circle] (head) at (2,0) {};
+        \draw[big arrow] (tail) -> (head);
         \graph{
             (tail) ->[edge label'={$e$}] (head);
         };
@@ -912,7 +938,7 @@ $\D$ väritys.
 Tarkemmin ilmaistuna,
 %
 \begin{align*}
-    V(\DL(G)) &= E(G) \\
+    V(\DL(G)) &= E(G), \\
     E(\DL(G)) &= \set{(v,u) \in E(G) \times E(G) \mid \head(v) = \tail(u)}.
 \end{align*}
 
@@ -926,12 +952,12 @@ Tarkemmin ilmaistuna,
     Verkon $\Dsn$ määritelmä $s$:n arvolla $1$ antaa seuraavan verkon:
     %
     \begin{align*}
-        V(D_{1,n}) &= \set{(k) \mid 1 \leq k \leq n} \\
+        V(D_{1,n}) &= \set{(k) \mid 1 \leq k \leq n}, \\
         E(D_{1,n}) &= \set{((k), (l)) \mid k < l}.
     \end{align*}
     %
     Tässä verkossa jokaisen solmuparin välillä on kaari tasan yhteen
-    suuntaan.
+    suuntaan. Siis $D_{1,n}$ on suunnattu täydellinen verkko.
 \end{proof}
 
 \begin{maar}
@@ -952,11 +978,8 @@ nimeämisen osalta. Jos kaksi verkkoa ovat isomorfiset niin ne ovat siis
 olennaisesti sama verkko.
 
 \begin{lem}
-    Verkko $\Dssn$ on verkon $\Dsn$ kaariverkko. Tarkemmin,
-    %
-    \begin{equation*}
-        \Dssn = \DL(\Dsn).
-    \end{equation*}
+    Verkko $\Dssn$ on verkon $\Dsn$ kaariverkko. Tarkemmin, verkot $\Dssn$ ja
+    $\DL(\Dsn)$ ovat isomorfisia.
 \end{lem}
 
 \begin{proof}
@@ -1151,6 +1174,8 @@ vaihtelevat. Lisäksi verkko $D_{1,n}$ on rakenteeltaan yksinkertainen
 täydellinen verkko.
 
 \begin{lem}
+    Kaikilla $n$ pätee
+    %
     \begin{equation*}
         \chi(D_{1,n}) = n.
     \end{equation*}
@@ -1234,6 +1259,8 @@ Aikaisemmista lemmoista saadaan nyt lopulta verkkojen $\Dsn$ vä\-ri\-tys\-lu\-v
 $\chi(\Dsn)$ alaraja.
 
 \begin{kor}
+    Kaikilla $n \in \nat$ ja $s < n$ pätee
+    %
     \begin{equation*}
         \chi(\Dssn) \geq \log \chi(\Dsn).
     \end{equation*}
