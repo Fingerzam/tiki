@@ -211,8 +211,8 @@ Esimerkiksi verkko $G = (V,E)$, missä
 %
 \begin{align*}
     V &= \set{a,b,c,d} \text{ ja}\\
-    E &= \set{ \set{a,b}, \set{b,c}, \set{c,a}, \set{a,d}} \\
-      &= \set{ab, bc, ca, ad},
+    E &= \set{ \set{a,b}, \set{b,c}, \set{c,a}, \set{a,d}}
+      = \set{ab, bc, ca, ad},
 \end{align*}
 %
 näyttää seuraavalta:
@@ -313,12 +313,15 @@ tietää oma värinsä laskennan päätyttyä.
     tasan kaksi naapuria.
 \end{maar}
 
+
 Toisin sanoen, $n$-sykli, missä $n \geq 3$, on verkko $C_n = (V,E)$, jolla
 %
 \begin{align*}
     V &= \set{v_1, v_2, \dots, v_n} \\
     E &= \set{v_iv_{i+1} \mid 1 \leq i < n} \cup \set{v_n v_1}.
 \end{align*}
+%
+Kuvassa \ref{fig:syklit} on piirretty esimerkkejä sykleistä.
 %
 \begin{figure}[t]
     \begin{center}
@@ -327,6 +330,7 @@ Toisin sanoen, $n$-sykli, missä $n \geq 3$, on verkko $C_n = (V,E)$, jolla
             $C_6$ & $C_3$ & $C_9$
         \end{tabular}
         \caption{Esimerkkejä sykleistä}
+        \label{fig:syklit}
     \end{center}
 \end{figure}
 %
@@ -413,7 +417,7 @@ logaritmi on siis äärimmäisen hitaasti kasvava funktio.
     täytyy aina olla kaari ja lisäksi sama solmu ei saa esiintyä jonossa
     kahdesti. Siis kaikilla $i \in \set{0, \dots, n-1}$ täytyy olla voimassa ehto $p_i
     p_{i+1} \in E(G)$. Lisäksi kaikilla $i,j \in \set{0,\dots,n}, i \neq j$ täytyy olla
-    voimassa ehto $p_i \neq p_j$. Polku $P$ on polku solmusta $p_1$ solmuun
+    voimassa ehto $p_i \neq p_j$. Polku $P$ on polku solmusta $p_0$ solmuun
     $p_n$.
 \end{maar}
 
@@ -1174,11 +1178,7 @@ vaihtelevat. Lisäksi verkko $D_{1,n}$ on rakenteeltaan yksinkertainen
 täydellinen verkko.
 
 \begin{lem}
-    Kaikilla $n$ pätee
-    %
-    \begin{equation*}
-        \chi(D_{1,n}) = n.
-    \end{equation*}
+    Kaikilla $n$ pätee $\chi(D_{1,n}) = n.$
 \end{lem}
 
 \begin{proof}
@@ -1193,11 +1193,7 @@ vä\-ri\-tys\-lu\-ku\-jen välille.
 \newcommand{\DLG}{\DL(G)}
 
 \begin{lem}
-    Olkoon $G$ kaariverkko. Tällöin
-    %
-    \begin{equation*}
-        \chi(\DLG) \geq \log \chi(G).
-    \end{equation*}
+    Olkoon $G$ kaariverkko. Tällöin $\chi(\DLG) \geq \log \chi(G).$
 \end{lem}
 
 \begin{proof}
@@ -1259,11 +1255,7 @@ Aikaisemmista lemmoista saadaan nyt lopulta verkkojen $\Dsn$ vä\-ri\-tys\-lu\-v
 $\chi(\Dsn)$ alaraja.
 
 \begin{kor}
-    Kaikilla $n \in \nat$ ja $s < n$ pätee
-    %
-    \begin{equation*}
-        \chi(\Dssn) \geq \log \chi(\Dsn).
-    \end{equation*}
+    Kaikilla $n \in \nat$ ja $s < n$ pätee $\chi(\Dssn) \geq \log \chi(\Dsn).$
 \end{kor}
 
 Erityisesti, koska $\chi(D_{1,n}) = n$, niin edellisestä korollaarista seuraa, että
